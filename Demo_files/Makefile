@@ -1,9 +1,3 @@
-git remote add origin https://github.com/arpitguptagithub/CompilerDesignIIT_tp-.git
-git branch -M main
-git push -u origin main
-
-
-
 CFLAGS=-g -DDEBUG -ll
 CC=gcc
 
