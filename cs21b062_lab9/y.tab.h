@@ -54,29 +54,29 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    ADD = 258,                     /* ADD  */
-    SUB = 259,                     /* SUB  */
-    MUL = 260,                     /* MUL  */
-    DIV = 261,                     /* DIV  */
-    INC = 262,                     /* INC  */
-    DEC = 263,                     /* DEC  */
-    AND = 264,                     /* AND  */
-    OR = 265,                      /* OR  */
-    LT = 266,                      /* LT  */
+    IF = 258,                      /* IF  */
+    ELSE = 259,                    /* ELSE  */
+    ADD = 260,                     /* ADD  */
+    SUB = 261,                     /* SUB  */
+    MUL = 262,                     /* MUL  */
+    DIV = 263,                     /* DIV  */
+    EQ = 264,                      /* EQ  */
+    LT = 265,                      /* LT  */
+    LTE = 266,                     /* LTE  */
     GT = 267,                      /* GT  */
-    LTE = 268,                     /* LTE  */
-    GTE = 269,                     /* GTE  */
-    NEQ = 270,                     /* NEQ  */
-    EQ = 271,                      /* EQ  */
-    ASSIGN = 272,                  /* ASSIGN  */
-    LPAREN = 273,                  /* LPAREN  */
-    RPAREN = 274,                  /* RPAREN  */
-    LBRACE = 275,                  /* LBRACE  */
-    RBRACE = 276,                  /* RBRACE  */
-    SEMICOLON = 277,               /* SEMICOLON  */
-    IF = 278,                      /* IF  */
-    ELSE = 279,                    /* ELSE  */
-    INTEGER = 280,                 /* INTEGER  */
+    GTE = 268,                     /* GTE  */
+    NOT = 269,                     /* NOT  */
+    AND = 270,                     /* AND  */
+    OR = 271,                      /* OR  */
+    PADD = 272,                    /* PADD  */
+    PSUB = 273,                    /* PSUB  */
+    LPAREN = 274,                  /* LPAREN  */
+    RPAREN = 275,                  /* RPAREN  */
+    LCURL = 276,                   /* LCURL  */
+    RCURL = 277,                   /* RCURL  */
+    SEMICOLON = 278,               /* SEMICOLON  */
+    WHILE = 279,                   /* WHILE  */
+    NUMBER = 280,                  /* NUMBER  */
     IDENTIFIER = 281               /* IDENTIFIER  */
   };
   typedef enum yytokentype yytoken_kind_t;
@@ -86,42 +86,43 @@ extern int yydebug;
 #define YYEOF 0
 #define YYerror 256
 #define YYUNDEF 257
-#define ADD 258
-#define SUB 259
-#define MUL 260
-#define DIV 261
-#define INC 262
-#define DEC 263
-#define AND 264
-#define OR 265
-#define LT 266
+#define IF 258
+#define ELSE 259
+#define ADD 260
+#define SUB 261
+#define MUL 262
+#define DIV 263
+#define EQ 264
+#define LT 265
+#define LTE 266
 #define GT 267
-#define LTE 268
-#define GTE 269
-#define NEQ 270
-#define EQ 271
-#define ASSIGN 272
-#define LPAREN 273
-#define RPAREN 274
-#define LBRACE 275
-#define RBRACE 276
-#define SEMICOLON 277
-#define IF 278
-#define ELSE 279
-#define INTEGER 280
+#define GTE 268
+#define NOT 269
+#define AND 270
+#define OR 271
+#define PADD 272
+#define PSUB 273
+#define LPAREN 274
+#define RPAREN 275
+#define LCURL 276
+#define RCURL 277
+#define SEMICOLON 278
+#define WHILE 279
+#define NUMBER 280
 #define IDENTIFIER 281
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 45 "prob1.y"
+#line 33 "prob1.y"
 
-    int ival;
-    char lexeme[20];
-    struct Snode * node;
+	char lexeme[100];
+	char addr[200];
+	char* lab;
+	int dval;
 
-#line 125 "y.tab.h"
+#line 126 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

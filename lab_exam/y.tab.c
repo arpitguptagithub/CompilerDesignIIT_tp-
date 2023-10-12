@@ -72,45 +72,17 @@
 #include <stdio.h>
 #include <string.h>
 int yylex();
-int yyerror(char *);
-int eflag=0;
-extern FILE * yyin;
+int flag = 0;
+int yyerror(const char *);
+extern FILE *yyin;
+
+struct Dates {
+    int dd, yyyy;
+    char mm[20];
+};
 
 
-typedef struct Snode{
-    struct Snode *left , *right;
-    char token[20];
-    char lexeme[20];
-    int ival;
-}Syn_node;
-
-
-			  char *	varL =  "";
-			  char *    varR = "";
-			  char * 	op = "";
-			  char * label ,label1; 
-			  char* Temp ;
-
-int LabelCount = 0 ;
-int TempCount = 0; 
-char *condt = "";
-char *con = "";
-int ifSelect = 0 ; 
-int preselect = 0;
-
-void postorder(Syn_node *root);
-void inorder(Syn_node *root);
-void preorder(Syn_node *root);
-void printNode(Syn_node *root);
-//void GOTO( ... );
-char* LabelGen( int LC );
-char* TempGen( int TC );
-char* Slabel , Stemp ; 
-char buffer[12]; // Assuming a maximum of 11 digits for LC (including null terminator)
-
-
-
-#line 114 "y.tab.c"
+#line 86 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -154,30 +126,9 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    ADD = 258,                     /* ADD  */
-    SUB = 259,                     /* SUB  */
-    MUL = 260,                     /* MUL  */
-    DIV = 261,                     /* DIV  */
-    INC = 262,                     /* INC  */
-    DEC = 263,                     /* DEC  */
-    AND = 264,                     /* AND  */
-    OR = 265,                      /* OR  */
-    LT = 266,                      /* LT  */
-    GT = 267,                      /* GT  */
-    LTE = 268,                     /* LTE  */
-    GTE = 269,                     /* GTE  */
-    NEQ = 270,                     /* NEQ  */
-    EQ = 271,                      /* EQ  */
-    ASSIGN = 272,                  /* ASSIGN  */
-    LPAREN = 273,                  /* LPAREN  */
-    RPAREN = 274,                  /* RPAREN  */
-    LBRACE = 275,                  /* LBRACE  */
-    RBRACE = 276,                  /* RBRACE  */
-    SEMICOLON = 277,               /* SEMICOLON  */
-    IF = 278,                      /* IF  */
-    ELSE = 279,                    /* ELSE  */
-    INTEGER = 280,                 /* INTEGER  */
-    IDENTIFIER = 281               /* IDENTIFIER  */
+    day = 258,                     /* day  */
+    month = 259,                   /* month  */
+    year = 260                     /* year  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -186,42 +137,22 @@ extern int yydebug;
 #define YYEOF 0
 #define YYerror 256
 #define YYUNDEF 257
-#define ADD 258
-#define SUB 259
-#define MUL 260
-#define DIV 261
-#define INC 262
-#define DEC 263
-#define AND 264
-#define OR 265
-#define LT 266
-#define GT 267
-#define LTE 268
-#define GTE 269
-#define NEQ 270
-#define EQ 271
-#define ASSIGN 272
-#define LPAREN 273
-#define RPAREN 274
-#define LBRACE 275
-#define RBRACE 276
-#define SEMICOLON 277
-#define IF 278
-#define ELSE 279
-#define INTEGER 280
-#define IDENTIFIER 281
+#define day 258
+#define month 259
+#define year 260
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 45 "prob1.y"
+#line 16 "prob1.y"
 
-    int ival;
-    char lexeme[20];
-    struct Snode * node;
+    int dd;
+    int yyyy;
+    char mm[20];
+    struct Dates *node;
 
-#line 225 "y.tab.c"
+#line 156 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -244,56 +175,14 @@ enum yysymbol_kind_t
   YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
-  YYSYMBOL_ADD = 3,                        /* ADD  */
-  YYSYMBOL_SUB = 4,                        /* SUB  */
-  YYSYMBOL_MUL = 5,                        /* MUL  */
-  YYSYMBOL_DIV = 6,                        /* DIV  */
-  YYSYMBOL_INC = 7,                        /* INC  */
-  YYSYMBOL_DEC = 8,                        /* DEC  */
-  YYSYMBOL_AND = 9,                        /* AND  */
-  YYSYMBOL_OR = 10,                        /* OR  */
-  YYSYMBOL_LT = 11,                        /* LT  */
-  YYSYMBOL_GT = 12,                        /* GT  */
-  YYSYMBOL_LTE = 13,                       /* LTE  */
-  YYSYMBOL_GTE = 14,                       /* GTE  */
-  YYSYMBOL_NEQ = 15,                       /* NEQ  */
-  YYSYMBOL_EQ = 16,                        /* EQ  */
-  YYSYMBOL_ASSIGN = 17,                    /* ASSIGN  */
-  YYSYMBOL_LPAREN = 18,                    /* LPAREN  */
-  YYSYMBOL_RPAREN = 19,                    /* RPAREN  */
-  YYSYMBOL_LBRACE = 20,                    /* LBRACE  */
-  YYSYMBOL_RBRACE = 21,                    /* RBRACE  */
-  YYSYMBOL_SEMICOLON = 22,                 /* SEMICOLON  */
-  YYSYMBOL_IF = 23,                        /* IF  */
-  YYSYMBOL_ELSE = 24,                      /* ELSE  */
-  YYSYMBOL_INTEGER = 25,                   /* INTEGER  */
-  YYSYMBOL_IDENTIFIER = 26,                /* IDENTIFIER  */
-  YYSYMBOL_YYACCEPT = 27,                  /* $accept  */
-  YYSYMBOL_S = 28,                         /* S  */
-  YYSYMBOL_29_1 = 29,                      /* $@1  */
-  YYSYMBOL_30_2 = 30,                      /* $@2  */
-  YYSYMBOL_31_3 = 31,                      /* $@3  */
-  YYSYMBOL_SL = 32,                        /* SL  */
-  YYSYMBOL_IFsl = 33,                      /* IFsl  */
-  YYSYMBOL_IFstmt = 34,                    /* IFstmt  */
-  YYSYMBOL_CONDTBLOCK = 35,                /* CONDTBLOCK  */
-  YYSYMBOL_STBLOCK = 36,                   /* STBLOCK  */
-  YYSYMBOL_IFELSEstmt = 37,                /* IFELSEstmt  */
-  YYSYMBOL_ELSEstmt = 38,                  /* ELSEstmt  */
-  YYSYMBOL_CONDT = 39,                     /* CONDT  */
-  YYSYMBOL_ANDEXP = 40,                    /* ANDEXP  */
-  YYSYMBOL_OREXP = 41,                     /* OREXP  */
-  YYSYMBOL_RELEXP = 42,                    /* RELEXP  */
-  YYSYMBOL_RELOP = 43,                     /* RELOP  */
-  YYSYMBOL_VARID = 44,                     /* VARID  */
-  YYSYMBOL_ST = 45,                        /* ST  */
-  YYSYMBOL_VAR = 46,                       /* VAR  */
-  YYSYMBOL_ADDEXP = 47,                    /* ADDEXP  */
-  YYSYMBOL_MULEXP = 48,                    /* MULEXP  */
-  YYSYMBOL_UEXP = 49,                      /* UEXP  */
-  YYSYMBOL_POEXP = 50,                     /* POEXP  */
-  YYSYMBOL_PREXP = 51,                     /* PREXP  */
-  YYSYMBOL_CONST = 52                      /* CONST  */
+  YYSYMBOL_day = 3,                        /* day  */
+  YYSYMBOL_month = 4,                      /* month  */
+  YYSYMBOL_year = 5,                       /* year  */
+  YYSYMBOL_YYACCEPT = 6,                   /* $accept  */
+  YYSYMBOL_Slist = 7,                      /* Slist  */
+  YYSYMBOL_8_1 = 8,                        /* $@1  */
+  YYSYMBOL_9_2 = 9,                        /* $@2  */
+  YYSYMBOL_Stmt = 10                       /* Stmt  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -619,21 +508,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  16
+#define YYFINAL  7
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   79
+#define YYLAST   8
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  27
+#define YYNTOKENS  6
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  26
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  53
+#define YYNRULES  7
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  84
+#define YYNSTATES  12
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   281
+#define YYMAXUTOK   260
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -673,21 +562,14 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26
+       5
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int16 yyrline[] =
+static const yytype_int8 yyrline[] =
 {
-       0,    58,    58,    58,    58,    58,    58,    58,    58,    60,
-      63,    63,    65,    81,    84,    86,    88,    90,    90,    90,
-      92,    94,    96,   108,   118,   128,   138,   148,   158,   169,
-     169,   175,   205,   233,   265,   275,   279,   282,   293,   305,
-     308,   319,   331,   334,   345,   356,   359,   371,   374,   385,
-     397,   400,   410,   414
+       0,    30,    30,    30,    31,    31,    32,    35
 };
 #endif
 
@@ -703,13 +585,8 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "ADD", "SUB", "MUL",
-  "DIV", "INC", "DEC", "AND", "OR", "LT", "GT", "LTE", "GTE", "NEQ", "EQ",
-  "ASSIGN", "LPAREN", "RPAREN", "LBRACE", "RBRACE", "SEMICOLON", "IF",
-  "ELSE", "INTEGER", "IDENTIFIER", "$accept", "S", "$@1", "$@2", "$@3",
-  "SL", "IFsl", "IFstmt", "CONDTBLOCK", "STBLOCK", "IFELSEstmt",
-  "ELSEstmt", "CONDT", "ANDEXP", "OREXP", "RELEXP", "RELOP", "VARID", "ST",
-  "VAR", "ADDEXP", "MULEXP", "UEXP", "POEXP", "PREXP", "CONST", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "day", "month", "year",
+  "$accept", "Slist", "$@1", "$@2", "Stmt", YY_NULLPTR
 };
 
 static const char *
@@ -719,12 +596,12 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-37)
+#define YYPACT_NINF (-4)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-9)
+#define YYTABLE_NINF (-7)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -733,15 +610,8 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       9,   -37,    35,    -7,   -37,    22,   -37,   -37,    -6,   -37,
-      34,     0,     5,    39,    35,    53,   -37,     5,     5,    -7,
-     -37,   -37,   -37,   -37,    44,   -37,   -37,    40,   -37,   -37,
-       6,    52,    18,   -37,   -37,   -37,    53,    44,    44,    44,
-      44,    44,   -37,   -37,    17,    19,   -37,    47,   -37,   -37,
-     -37,    35,    35,   -37,   -37,   -37,   -37,   -37,   -37,    12,
-      54,   -37,   -37,   -37,   -37,   -37,    10,    44,    44,    44,
-      44,   -37,   -37,   -37,   -37,   -37,   -37,   -37,   -37,   -37,
-      19,    19,   -37,   -37
+       0,    -4,     2,     4,    -4,     0,     3,    -4,     0,    -4,
+      -4,    -4
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -749,31 +619,20 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     6,     0,     0,    34,     0,     4,     2,    10,    11,
-       0,     0,     0,     0,     0,     0,     1,     0,     0,     0,
-      15,     9,    32,    33,     0,     7,    35,     0,    18,    19,
-      17,     0,     0,    12,     5,     3,     0,     0,     0,     0,
-       0,     0,    53,    51,    31,    36,    39,    42,    47,    50,
-      13,     0,     0,    23,    24,    25,    26,    27,    28,     0,
-       0,    16,    45,    46,    43,    44,     0,     0,     0,     0,
-       0,    48,    49,    20,    21,    22,    29,    30,    14,    52,
-      37,    38,    40,    41
+       0,     4,     0,     0,     2,     0,     0,     1,     0,     5,
+       7,     3
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -37,    28,   -37,   -37,   -37,   -37,   -37,   -37,    55,    41,
-     -37,   -37,    -9,   -37,   -37,   -37,   -37,   -37,   -37,    -2,
-      37,     4,   -36,   -37,   -37,    20
+      -4,    -3,    -4,    -4,    -4
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     5,    18,    17,    12,     6,     7,     8,    15,    33,
-       9,    20,    27,    28,    29,    30,    59,    75,    10,    11,
-      44,    45,    46,    47,    48,    49
+       0,     3,     8,     5,     4
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -781,63 +640,32 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      13,    62,    63,    64,    65,    -8,     1,    22,    23,    -8,
-       1,    14,    31,    67,    68,    51,    52,    24,    19,     1,
-      67,    68,    16,     2,    69,    70,    -8,     2,     3,    79,
-       2,     4,     3,    82,    83,     4,     2,    42,     4,    -8,
-      25,     3,    73,    74,     4,    34,    35,    37,    38,    31,
-      31,    39,    40,     2,    71,    72,    21,    76,    26,    50,
-      60,     4,    41,    53,    54,    55,    56,    57,    58,    42,
-      43,    80,    81,    32,    36,    78,     0,    61,    66,    77
+      -6,     1,     9,     2,     7,    11,     6,     0,    10
 };
 
 static const yytype_int8 yycheck[] =
 {
-       2,    37,    38,    39,    40,     0,     1,     7,     8,     0,
-       1,    18,    14,     3,     4,     9,    10,    17,    24,     1,
-       3,     4,     0,    18,     5,     6,    21,    18,    23,    19,
-      18,    26,    23,    69,    70,    26,    18,    25,    26,    21,
-      12,    23,    51,    52,    26,    17,    18,     3,     4,    51,
-      52,     7,     8,    18,     7,     8,    22,    59,    19,    19,
-      32,    26,    18,    11,    12,    13,    14,    15,    16,    25,
-      26,    67,    68,    20,    19,    21,    -1,    36,    41,    59
+       0,     1,     5,     3,     0,     8,     4,    -1,     5
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     1,    18,    23,    26,    28,    32,    33,    34,    37,
-      45,    46,    31,    46,    18,    35,     0,    30,    29,    24,
-      38,    22,     7,     8,    17,    28,    19,    39,    40,    41,
-      42,    46,    20,    36,    28,    28,    35,     3,     4,     7,
-       8,    18,    25,    26,    47,    48,    49,    50,    51,    52,
-      19,     9,    10,    11,    12,    13,    14,    15,    16,    43,
-      28,    36,    49,    49,    49,    49,    47,     3,     4,     5,
-       6,     7,     8,    39,    39,    44,    46,    52,    21,    19,
-      48,    48,    49,    49
+       0,     1,     3,     7,    10,     9,     4,     0,     8,     7,
+       5,     7
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    27,    29,    28,    30,    28,    31,    28,    28,    32,
-      33,    33,    34,    35,    36,    37,    38,    39,    39,    39,
-      40,    41,    42,    43,    43,    43,    43,    43,    43,    44,
-      44,    45,    45,    45,    46,    46,    47,    47,    47,    48,
-      48,    48,    49,    49,    49,    49,    49,    50,    50,    50,
-      51,    51,    51,    52
+       0,     6,     8,     7,     9,     7,     7,    10
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0,     3,     0,     3,     0,     3,     0,     2,
-       1,     1,     3,     3,     3,     2,     3,     1,     1,     1,
-       3,     3,     3,     1,     1,     1,     1,     1,     1,     1,
-       1,     3,     2,     2,     1,     3,     1,     3,     3,     1,
-       3,     3,     1,     2,     2,     2,     2,     1,     2,     2,
-       1,     1,     3,     1
+       0,     2,     0,     3,     0,     3,     0,     3
 };
 
 
@@ -1301,506 +1129,72 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* $@1: %empty  */
-#line 58 "prob1.y"
-         {printf("\nAccepted EXPR\n");}
-#line 1307 "y.tab.c"
+#line 30 "prob1.y"
+             { if( flag == 0 ){ printf("Accept\n"); }}
+#line 1135 "y.tab.c"
     break;
 
   case 4: /* $@2: %empty  */
-#line 58 "prob1.y"
-                                               {printf("\nAccepted EXPR\n");}
-#line 1313 "y.tab.c"
+#line 31 "prob1.y"
+                { printf("error\n"); }
+#line 1141 "y.tab.c"
     break;
 
-  case 6: /* $@3: %empty  */
-#line 58 "prob1.y"
-                                                                                        {printf ("REJECTED \n");}
-#line 1319 "y.tab.c"
+  case 6: /* Slist: %empty  */
+#line 32 "prob1.y"
+          { printf("Completed\n"); }
+#line 1147 "y.tab.c"
     break;
 
-  case 8: /* S: %empty  */
-#line 58 "prob1.y"
-                                                                                                                      {printf("\n\nCompleted..!\n");}
-#line 1325 "y.tab.c"
-    break;
+  case 7: /* Stmt: day month year  */
+#line 36 "prob1.y"
+        {
+            struct Dates *dateNode = malloc(sizeof(struct Dates));
+            dateNode->dd = (yyvsp[-2].dd);
+            strcpy(dateNode->mm, (yyvsp[-1].mm));
+            dateNode->yyyy = (yyvsp[0].yyyy);
 
-  case 10: /* IFsl: IFstmt  */
-#line 63 "prob1.y"
-              { ifSelect = 0 ; }
-#line 1331 "y.tab.c"
-    break;
+            printf("%i %s %i \n" , dateNode->dd , dateNode->mm , dateNode->yyyy );
 
-  case 11: /* IFsl: IFELSEstmt  */
-#line 63 "prob1.y"
-                                              { ifSelect = 1; }
-#line 1337 "y.tab.c"
-    break;
+            if (strcmp((yyvsp[-1].mm), "Mar") == 0 || strcmp((yyvsp[-1].mm), "Jan") == 0)
+            {
+                if (dateNode->dd > 31)
+                {   flag =1 ;
+                    yyerror("Wrong date");
+                }
+            }
+            else if (strcmp((yyvsp[-1].mm), "Feb") == 0)
+            {
+                if ((dateNode->yyyy % 4 == 0 && dateNode->yyyy % 100 != 0) || (dateNode->yyyy % 400 == 0))
+                {
+                    if (dateNode->dd > 29 || dateNode->dd <= 0)
+                    { flag = 1; 
+                        yyerror("wrong leap date");
+                    }
+                }
+                else
+                {
+                    if (dateNode->dd > 28 || dateNode->dd <= 0)
+                    {  flag = 1;
+                        yyerror("wrong non-leap date");
+                    }
+                }
+            }
+            else
+            {
+                if (dateNode->dd > 30)
+                {  flag = 1;
+                    yyerror("Wrong date");
+                }
+            }
 
-  case 12: /* IFstmt: IF CONDTBLOCK STBLOCK  */
-#line 65 "prob1.y"
-                                {
-
-	 label = LabelGen(LabelCount);
-	label1 = LabelGen(LabelCount + 1);
-
-
-	LabelCount ++;
-	printf("if %s goto %s", condt, label);
-	
-	printf("goto %s", label1);
-
-	free(label);
-	free(label1);
-	
-}
-#line 1357 "y.tab.c"
-    break;
-
-  case 22: /* RELEXP: VAR RELOP VARID  */
-#line 98 "prob1.y"
-           {
-		  (yyval.node) = malloc(sizeof(Syn_node));
-				if ((yyval.node) == NULL) {
-					yyerror("Error");
-				}
-			con = strcat((yyvsp[-2].node)->lexeme , (yyvsp[-1].node)->lexeme);
-		  condt = strcat(con , (yyvsp[0].node)->lexeme);
-          strcpy((yyval.node)->lexeme ,condt);
-	   }
-#line 1371 "y.tab.c"
-    break;
-
-  case 23: /* RELOP: LT  */
-#line 109 "prob1.y"
-{
-    (yyval.node) = malloc(sizeof(Syn_node));
-    if ((yyval.node) == NULL) {
-        yyerror("Error");
-    }
-    strcpy((yyval.node)->token, "LT");
-    strcpy((yyval.node)->lexeme, "<");
-}
-#line 1384 "y.tab.c"
-    break;
-
-  case 24: /* RELOP: GT  */
-#line 119 "prob1.y"
-{
-    (yyval.node) = malloc(sizeof(Syn_node));
-    if ((yyval.node) == NULL) {
-        yyerror("Error");
-    }
-    strcpy((yyval.node)->token, "GT");
-    strcpy((yyval.node)->lexeme, ">");
-}
-#line 1397 "y.tab.c"
-    break;
-
-  case 25: /* RELOP: LTE  */
-#line 129 "prob1.y"
-{
-    (yyval.node) = malloc(sizeof(Syn_node));
-    if ((yyval.node) == NULL) {
-        yyerror("Error");
-    }
-    strcpy((yyval.node)->token, "LTE");
-    strcpy((yyval.node)->lexeme, "<=");
-}
-#line 1410 "y.tab.c"
-    break;
-
-  case 26: /* RELOP: GTE  */
-#line 139 "prob1.y"
-{
-    (yyval.node) = malloc(sizeof(Syn_node));
-    if ((yyval.node) == NULL) {
-        yyerror("Error");
-    }
-    strcpy((yyval.node)->token, "GTE");
-    strcpy((yyval.node)->lexeme, ">=");
-}
-#line 1423 "y.tab.c"
-    break;
-
-  case 27: /* RELOP: NEQ  */
-#line 149 "prob1.y"
-{
-    (yyval.node) = malloc(sizeof(Syn_node));
-    if ((yyval.node) == NULL) {
-        yyerror("Error");
-    }
-    strcpy((yyval.node)->token, "NEQ");
-    strcpy((yyval.node)->lexeme, "!=");
-}
-#line 1436 "y.tab.c"
-    break;
-
-  case 28: /* RELOP: EQ  */
-#line 159 "prob1.y"
-{
-    (yyval.node) = malloc(sizeof(Syn_node));
-    if ((yyval.node) == NULL) {
-        yyerror("Error");
-    }
-    strcpy((yyval.node)->token, "EQ");
-    strcpy((yyval.node)->lexeme, "==");
-}
-#line 1449 "y.tab.c"
-    break;
-
-  case 31: /* ST: VAR ASSIGN ADDEXP  */
-#line 175 "prob1.y"
-                                   {
-				(yyval.node) = malloc(sizeof(Syn_node));
-				if ((yyval.node) == NULL) {
-					yyerror("Error");
-				}
-
-				 Temp = TempGen(TempCount);
-				TempCount++;
-			  	label = LabelGen(LabelCount);
-				printf("%s : \t", label );
-
-
-			  	varL = (yyvsp[-2].node);
-			    varR = (yyvsp[0].node);
-			   	op = "=";
-
-				threeExp( Temp , varL , varR  , op ); 
-
-				if ( ifSelect == 1)
-				{
-					ifSelect = 0; 
-					printf ( "goto %s" ,label);
-				}
-
-			
-				free(label);
-				free(Temp);
-				
-			}
-#line 1483 "y.tab.c"
-    break;
-
-  case 32: /* ST: VAR INC  */
-#line 205 "prob1.y"
-                                   {
-				(yyval.node) = malloc(sizeof(Syn_node));
-				if ((yyval.node) == NULL) {
-					yyerror("Error");
-				}
-
-				 Temp = TempGen(TempCount);
-				TempCount++;
-			  	label = LabelGen(LabelCount);
-				printf("%s : \t", label );
-
-			  varL = (yyvsp[-1].node);
-			  varR =  " ";
-		    	op =  "+";
-			  
-			  threeExp( Temp , varL , varR  , op ); 
-
-				if ( ifSelect == 1)
-				{
-					ifSelect = 0; 
-					printf ( "goto %s",  label);
-				}
-				free(label);
-				free(Temp);
-
-				
-			}
-#line 1515 "y.tab.c"
-    break;
-
-  case 33: /* ST: VAR DEC  */
-#line 233 "prob1.y"
-                                  {
-				(yyval.node) = malloc(sizeof(Syn_node));
-				if ((yyval.node) == NULL) {
-					yyerror("Error");
-				}
-
-				Temp = TempGen(TempCount);
-				TempCount++;
-			  	label = LabelGen(LabelCount);
-				printf("%s : \t", label );
-			
-
-			  varL = (yyvsp[-1].node);
-			  varR = "";
-			  op = "-";
-			  
-			  threeExp( Temp , varL , varR  , op ); 
-
-				if ( ifSelect == 1)
-				{
-					ifSelect = 0; 
-					printf ( "goto %s" , label);
-				}
-				free(label);
-				free(Temp);
-			}
-#line 1546 "y.tab.c"
-    break;
-
-  case 34: /* VAR: IDENTIFIER  */
-#line 265 "prob1.y"
-                   {
-				(yyval.node) = malloc(sizeof(Syn_node));
-				if ((yyval.node) == NULL) {
-					yyerror("Error");
-				}
-				strcpy((yyval.node)->lexeme, (yyvsp[0].lexeme));
-				strcpy((yyval.node)->token,"ID");
-				(yyval.node)->left = NULL;
-				(yyval.node)->right = NULL;
-			}
-#line 1561 "y.tab.c"
-    break;
-
-  case 35: /* VAR: LPAREN VAR RPAREN  */
-#line 275 "prob1.y"
-                                            {
-				(yyval.node) = (yyvsp[-1].node);
-			}
-#line 1569 "y.tab.c"
-    break;
-
-  case 36: /* ADDEXP: MULEXP  */
-#line 279 "prob1.y"
-                       {
-							(yyval.node) = (yyvsp[0].node);
-						}
-#line 1577 "y.tab.c"
-    break;
-
-  case 37: /* ADDEXP: ADDEXP ADD MULEXP  */
-#line 282 "prob1.y"
-                                                                    {
-							(yyval.node) = malloc(sizeof(Syn_node));
-							if ((yyval.node) == NULL) {
-								yyerror("Error");
-							}
-							(yyval.node)->left = (yyvsp[-2].node);
-							(yyval.node)->right = (yyvsp[0].node);
-							(yyval.node)->ival = (yyvsp[-2].node)->ival + (yyvsp[0].node)->ival;
-							strcpy((yyval.node)->token, "OP");
-							strcpy((yyval.node)->lexeme, "+");
-						}
-#line 1593 "y.tab.c"
-    break;
-
-  case 38: /* ADDEXP: ADDEXP SUB MULEXP  */
-#line 293 "prob1.y"
-                                                                    {
-							(yyval.node) = malloc(sizeof(Syn_node));
-							if ((yyval.node) == NULL) {
-								yyerror("Error");
-							}
-							(yyval.node)->left = (yyvsp[-2].node);
-							(yyval.node)->right = (yyvsp[0].node);
-							(yyval.node)->ival = (yyvsp[-2].node)->ival - (yyvsp[0].node)->ival;
-							strcpy((yyval.node)->token, "OP");
-							strcpy((yyval.node)->lexeme, "-");
-						}
-#line 1609 "y.tab.c"
-    break;
-
-  case 39: /* MULEXP: UEXP  */
-#line 305 "prob1.y"
-                     {
-								(yyval.node) = (yyvsp[0].node);
-							}
-#line 1617 "y.tab.c"
-    break;
-
-  case 40: /* MULEXP: MULEXP MUL UEXP  */
-#line 308 "prob1.y"
-                                                                          {
-								(yyval.node) = malloc(sizeof(Syn_node));
-								if ((yyval.node) == NULL) {
-									yyerror("Error");
-								}
-								(yyval.node)->left = (yyvsp[-2].node);
-								(yyval.node)->right = (yyvsp[0].node);
-								(yyval.node)->ival = (yyvsp[-2].node)->ival * (yyvsp[0].node)->ival;
-								strcpy((yyval.node)->token, "OP");
-								strcpy((yyval.node)->lexeme, "*");
-							}
-#line 1633 "y.tab.c"
-    break;
-
-  case 41: /* MULEXP: MULEXP DIV UEXP  */
-#line 319 "prob1.y"
-                                                                          {
-								(yyval.node) = malloc(sizeof(Syn_node));
-								if ((yyval.node) == NULL) {
-									yyerror("Error");
-								}
-								(yyval.node)->left = (yyvsp[-2].node);
-								(yyval.node)->right = (yyvsp[0].node);
-								(yyval.node)->ival = (yyvsp[-2].node)->ival / (yyvsp[0].node)->ival;
-								strcpy((yyval.node)->token, "OP");
-								strcpy((yyval.node)->lexeme, "/");
-							}
-#line 1649 "y.tab.c"
-    break;
-
-  case 42: /* UEXP: POEXP  */
-#line 331 "prob1.y"
-              {
-						(yyval.node) = (yyvsp[0].node);
-					}
-#line 1657 "y.tab.c"
-    break;
-
-  case 43: /* UEXP: INC UEXP  */
-#line 334 "prob1.y"
-                                                   {
-						(yyval.node) = malloc(sizeof(Syn_node));
-						if ((yyval.node) == NULL) {
-							yyerror("Error");
-						}
-						(yyval.node)->left = NULL;
-						(yyval.node)->right = (yyvsp[0].node);
-						(yyval.node)->ival = (yyvsp[0].node)->ival + 1;
-						strcpy((yyval.node)->token, "OP");
-						strcpy((yyval.node)->lexeme, "++");
-					}
-#line 1673 "y.tab.c"
-    break;
-
-  case 44: /* UEXP: DEC UEXP  */
-#line 345 "prob1.y"
-                                                   {
-						(yyval.node) = malloc(sizeof(Syn_node));
-						if ((yyval.node) == NULL) {
-							yyerror("Error");
-						}
-						(yyval.node)->left = NULL;
-						(yyval.node)->right = (yyvsp[0].node);
-						(yyval.node)->ival = (yyvsp[0].node)->ival - 1;
-						strcpy((yyval.node)->token, "OP");
-						strcpy((yyval.node)->lexeme, "--");
-					}
-#line 1689 "y.tab.c"
-    break;
-
-  case 45: /* UEXP: ADD UEXP  */
-#line 356 "prob1.y"
-                                                   {
-						(yyval.node) = (yyvsp[0].node);
-					}
-#line 1697 "y.tab.c"
-    break;
-
-  case 46: /* UEXP: SUB UEXP  */
-#line 359 "prob1.y"
-                                                   {
-						(yyval.node) = malloc(sizeof(Syn_node));
-						if ((yyval.node) == NULL) {
-							yyerror("Error");
-						}
-						(yyval.node)->left = (yyvsp[0].node);
-						(yyval.node)->right = NULL;
-						(yyval.node)->ival = -1 * (yyvsp[0].node)->ival;
-						strcpy((yyval.node)->token, "OP");
-						strcpy((yyval.node)->lexeme, "negative");
-					}
-#line 1713 "y.tab.c"
-    break;
-
-  case 47: /* POEXP: PREXP  */
-#line 371 "prob1.y"
-                      {
-							(yyval.node) = (yyvsp[0].node);
-						}
-#line 1721 "y.tab.c"
-    break;
-
-  case 48: /* POEXP: POEXP INC  */
-#line 374 "prob1.y"
-                                                            {
-							(yyval.node) = malloc(sizeof(Syn_node));
-							if ((yyval.node) == NULL) {
-								yyerror("Error");
-							}
-							(yyval.node)->left = (yyvsp[-1].node);
-							(yyval.node)->right = NULL;
-							(yyval.node)->ival = (yyvsp[-1].node)->ival + 1;
-							strcpy((yyval.node)->token, "OP");
-							strcpy((yyval.node)->lexeme, "++");
-						}
-#line 1737 "y.tab.c"
-    break;
-
-  case 49: /* POEXP: POEXP DEC  */
-#line 385 "prob1.y"
-                                                            {
-							(yyval.node) = malloc(sizeof(Syn_node));
-							if ((yyval.node) == NULL) {
-								yyerror("Error");
-							}
-							(yyval.node)->left = (yyvsp[-1].node);
-							(yyval.node)->right = NULL;
-							(yyval.node)->ival = (yyvsp[-1].node)->ival - 1;
-							strcpy((yyval.node)->token, "OP");
-							strcpy((yyval.node)->lexeme, "--");
-						}
-#line 1753 "y.tab.c"
-    break;
-
-  case 50: /* PREXP: CONST  */
-#line 397 "prob1.y"
-                      {
-							(yyval.node) = (yyvsp[0].node);
-						}
-#line 1761 "y.tab.c"
-    break;
-
-  case 51: /* PREXP: IDENTIFIER  */
-#line 400 "prob1.y"
-                                                           {
-							(yyval.node) = malloc(sizeof(Syn_node));
-							if ((yyval.node) == NULL) {
-								yyerror("Error");
-							}
-							strcpy((yyval.node)->lexeme, (yyvsp[0].lexeme));
-							(yyval.node)->left = NULL;
-							(yyval.node)->right = NULL;
-							strcpy((yyval.node)->token, "ID");
-					}
-#line 1776 "y.tab.c"
-    break;
-
-  case 52: /* PREXP: LPAREN ADDEXP RPAREN  */
-#line 410 "prob1.y"
-                                                                     {
-							(yyval.node) = (yyvsp[-1].node);
-					}
-#line 1784 "y.tab.c"
-    break;
-
-  case 53: /* CONST: INTEGER  */
-#line 414 "prob1.y"
-                        {
-				(yyval.node) = malloc(sizeof(Syn_node));
-				if ((yyval.node) == NULL) {
-					yyerror("Error");
-				}
-				(yyval.node)->ival = (yyvsp[0].ival);
-				(yyval.node)->left = NULL;
-				(yyval.node)->right = NULL;
-				strcpy((yyval.node)->token, "CONST");
-				strcpy((yyval.node)->lexeme, "INT");
-			}
-#line 1800 "y.tab.c"
+            (yyval.node) = dateNode;
+        }
+#line 1194 "y.tab.c"
     break;
 
 
-#line 1804 "y.tab.c"
+#line 1198 "y.tab.c"
 
       default: break;
     }
@@ -1993,77 +1387,22 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 429 "prob1.y"
+#line 79 "prob1.y"
 
 
-int yyerror ( char *s)
-{
+int yyerror(const char *s){
+    fprintf(stderr, "Error: %s\n", s);
     return 0;
 }
 
-int main( int argc , char* argv[])
+int main(int argc, char *argv[])
 {
-    if( argc>1)
+    if (argc > 1)
     {
-        FILE *fp = fopen(argv[1],"r");
-        if(fp)
-         yyin =fp;
+        FILE *fp = fopen(argv[1], "r");
+        if (fp)
+            yyin = fp;
     }
     yyparse();
     return 0;
 }
-
-
-
-char* LabelGen(int LC) {
-    snprintf(buffer, sizeof(buffer), "L%d", LC);
-    
-     Slabel = malloc(strlen(buffer) + 1); // +1 for the null terminator
-    if (Slabel == NULL) {
-        // Handle memory allocation error
-        return NULL;
-    }
-    
-    strcpy(Slabel, buffer);
-	free(buffer);
-    return Slabel;
-}
-
-
-char* TempGen(int TC) {
-     // Assuming a maximum of 11 digits for LC (including null terminator)
-    snprintf(buffer, sizeof(buffer), "t%d", TC);
-    
-    Stemp = malloc(strlen(buffer) + 1); // +1 for the null terminator
-    if (Stemp == NULL) {
-        // Handle memory allocation error
-        return NULL;
-    }
-    
-    strcpy(Stemp, buffer);
-	free (buffer);
-    return Stemp;
-}
-
-
-void threeExp(char *Temp, char *varL, char *varR, char *op) {
-    if (strcmp(op, "--") == 0) {
-        printf("%s = %s - 1\n", Temp, varL);
-        printf ("%s = %s\n", varL , Temp);
-    } 
-    else if (strcmp(op, "++") == 0) {
-        printf("%s = %s + 1\n", Temp, varL);
-        printf ("%s = %s\n", varL , Temp);
-    } 
-    
-    else if (strcmp(op, "=") == 0) {
-        printf("%s = %s\n", Temp, varR);
-        printf("%s = %s\n", varL, Temp);
-    } else {
-        // Handle other operations if needed
-        printf("Unsupported operation: %s\n", op);
-    }
-}
-
-
-
