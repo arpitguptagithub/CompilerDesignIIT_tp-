@@ -115,12 +115,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 33 "prob1.y"
+#line 30 "prob1.y"
 
-	char lexeme[100];
-	char addr[200];
-	char* lab;
-	int dval;
+    char lexeme[100];
+    char addr[200];
+    char* lab;
+    int dval;
 
 #line 126 "y.tab.h"
 

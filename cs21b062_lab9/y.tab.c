@@ -67,15 +67,15 @@
 
 
 /* First part of user prologue.  */
-#line 4 "prob1.y"
+#line 1 "prob1.y"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 void yyerror(char*);
-int eflag = 0;
 int yylex();
-extern FILE * yyin;
+extern FILE* yyin;
 
 char str[1000];
 char* genLabel();
@@ -190,12 +190,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 33 "prob1.y"
+#line 30 "prob1.y"
 
-	char lexeme[100];
-	char addr[200];
-	char* lab;
-	int dval;
+    char lexeme[100];
+    char addr[200];
+    char* lab;
+    int dval;
 
 #line 201 "y.tab.c"
 
@@ -249,20 +249,18 @@ enum yysymbol_kind_t
   YYSYMBOL_29_1 = 29,                      /* $@1  */
   YYSYMBOL_30_2 = 30,                      /* $@2  */
   YYSYMBOL_31_3 = 31,                      /* $@3  */
-  YYSYMBOL_32_4 = 32,                      /* $@4  */
-  YYSYMBOL_33_5 = 33,                      /* $@5  */
-  YYSYMBOL_34_6 = 34,                      /* $@6  */
-  YYSYMBOL_35_7 = 35,                      /* $@7  */
-  YYSYMBOL_ElseStmt = 36,                  /* ElseStmt  */
-  YYSYMBOL_dummyLabels = 37,               /* dummyLabels  */
-  YYSYMBOL_begin = 38,                     /* begin  */
-  YYSYMBOL_Statement = 39,                 /* Statement  */
-  YYSYMBOL_ComRelExp = 40,                 /* ComRelExp  */
-  YYSYMBOL_Relexp = 41,                    /* Relexp  */
-  YYSYMBOL_Term = 42,                      /* Term  */
-  YYSYMBOL_Factor = 43,                    /* Factor  */
-  YYSYMBOL_SIGNVal = 44,                   /* SIGNVal  */
-  YYSYMBOL_Val = 45                        /* Val  */
+  YYSYMBOL_IfStatement = 32,               /* IfStatement  */
+  YYSYMBOL_33_4 = 33,                      /* $@4  */
+  YYSYMBOL_34_5 = 34,                      /* $@5  */
+  YYSYMBOL_dummyLabels = 35,               /* dummyLabels  */
+  YYSYMBOL_begin = 36,                     /* begin  */
+  YYSYMBOL_Statement = 37,                 /* Statement  */
+  YYSYMBOL_ComRelExp = 38,                 /* ComRelExp  */
+  YYSYMBOL_Relexp = 39,                    /* Relexp  */
+  YYSYMBOL_Term = 40,                      /* Term  */
+  YYSYMBOL_Factor = 41,                    /* Factor  */
+  YYSYMBOL_SIGNVal = 42,                   /* SIGNVal  */
+  YYSYMBOL_Val = 43                        /* Val  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -588,18 +586,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  27
+#define YYFINAL  28
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   121
+#define YYLAST   116
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  27
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  19
+#define YYNNTS  17
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  46
+#define YYNRULES  43
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  94
+#define YYNSTATES  88
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   281
@@ -651,11 +649,11 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    58,    58,    59,    62,    62,    59,    63,    63,    64,
-      64,    63,    65,    69,    70,    74,    79,    82,    89,    93,
-     103,   113,   117,   127,   137,   147,   157,   167,   177,   188,
-     196,   201,   210,   219,   223,   233,   242,   246,   250,   254,
-     258,   261,   267,   275,   283,   291,   300
+       0,    55,    55,    56,    57,    58,    58,    57,    59,    63,
+      64,    63,    73,    76,    79,    85,    89,    98,   107,   111,
+     120,   129,   138,   147,   156,   165,   175,   183,   187,   196,
+     205,   209,   219,   228,   232,   236,   240,   244,   247,   253,
+     261,   269,   277,   285
 };
 #endif
 
@@ -675,9 +673,8 @@ static const char *const yytname[] =
   "SUB", "MUL", "DIV", "EQ", "LT", "LTE", "GT", "GTE", "NOT", "AND", "OR",
   "PADD", "PSUB", "LPAREN", "RPAREN", "LCURL", "RCURL", "SEMICOLON",
   "WHILE", "NUMBER", "IDENTIFIER", "$accept", "StatementList", "$@1",
-  "$@2", "$@3", "$@4", "$@5", "$@6", "$@7", "ElseStmt", "dummyLabels",
-  "begin", "Statement", "ComRelExp", "Relexp", "Term", "Factor", "SIGNVal",
-  "Val", YY_NULLPTR
+  "$@2", "$@3", "IfStatement", "$@4", "$@5", "dummyLabels", "begin",
+  "Statement", "ComRelExp", "Relexp", "Term", "Factor", "SIGNVal", "Val", YY_NULLPTR
 };
 
 static const char *
@@ -687,7 +684,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-45)
+#define YYPACT_NINF (-25)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -701,16 +698,15 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       6,   -16,    20,    20,   -10,    10,    -4,    21,   -45,    24,
-      51,    33,     2,    46,   -45,   -45,    53,    43,   -45,   -45,
-     -45,   -45,     0,    53,    63,   -45,   -45,   -45,     6,    -4,
-      -4,    -4,    -4,    53,    53,    94,   -45,    93,   -45,    96,
-     -45,   -45,    46,    46,   -45,   -45,   -45,    55,    81,    53,
-      53,    62,    57,    -4,    -4,    -4,    -4,    87,    76,   -45,
-     -45,   -45,   -45,    -4,     2,     2,     2,     2,    -4,   -45,
-     -45,     2,     2,   -45,   -45,   -45,     6,   -45,   -45,     6,
-      78,    86,   109,   -45,    97,   -45,   -45,     6,     6,     6,
-      95,   -45,   -45,   -45
+      -2,   -14,    38,    38,   -18,    -8,    24,    14,   -25,    67,
+      40,    -2,    21,    30,    51,   -25,   -25,    20,    61,   -25,
+     -25,   -25,   -25,     1,    20,    64,   -25,   -25,   -25,   -25,
+      -2,    24,    24,    24,    24,    20,    20,    -6,   -25,    94,
+     -25,    57,   -25,   -25,    51,    51,   -25,   -25,   -25,    42,
+      82,    20,    20,    39,    58,    24,    24,    24,    24,    65,
+      59,   -25,   -25,   -25,   -25,    24,    30,    30,    30,    30,
+      24,   -25,   -25,    30,    30,   -25,    -2,   -25,    79,    -2,
+     -25,    91,    -2,   -25,   -25,   -25,    -2,   -25
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -718,30 +714,29 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-      12,     0,     0,     0,     0,     0,     0,     0,    41,    40,
-       0,     0,    18,    33,    36,    39,    30,    40,    37,    38,
-      42,    43,     0,    30,     0,    44,    45,     1,    12,     0,
-       0,     0,     0,    30,    30,     0,    21,     0,    46,     0,
-      17,     2,    31,    32,    34,    35,    29,     0,     0,    30,
-      30,     0,     0,     0,     0,     0,     0,     0,     0,    28,
-      19,    20,    15,     0,    22,    23,    24,    25,     0,    16,
-      15,    26,    27,    15,     3,     7,    12,     8,     4,    12,
-       0,     0,    14,     9,     0,     5,    10,    12,    12,    12,
-       0,     6,    11,    13
+       8,     0,     0,     0,     0,     0,     0,     0,    38,    37,
+       0,     8,     0,    15,    30,    33,    36,    27,    37,    34,
+      35,    39,    40,     0,    27,     0,    41,    42,     1,     3,
+       8,     0,     0,     0,     0,    27,    27,     0,    18,     0,
+      43,     0,    14,     2,    28,    29,    31,    32,    26,     0,
+       0,    27,    27,     0,     0,     0,     0,     0,     0,     0,
+       0,    25,    16,    17,     9,     0,    19,    20,    21,    22,
+       0,    13,    12,    23,    24,    12,     8,     4,     0,     8,
+      10,     0,     8,     5,    11,     6,     8,     7
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -45,   -24,   -45,   -45,   -45,   -45,   -45,   -45,   -45,   -45,
-     -44,   -45,    91,    98,   -15,    -6,    44,    45,    82
+     -25,   -11,   -25,   -25,   -25,   -25,   -25,   -25,    11,   -25,
+      89,    92,   -24,    -4,    66,    76,   109
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,    10,    76,    80,    88,    77,    79,    86,    89,    85,
-      70,    73,    11,    35,    36,    12,    13,    14,    15
+       0,    10,    79,    85,    86,    11,    72,    82,    76,    75,
+      12,    37,    38,    13,    14,    15,    16
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -749,36 +744,34 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      22,     2,     3,    16,    41,    29,    30,    29,    30,     1,
-      37,     2,     3,     4,     5,     6,    20,    37,    46,    47,
-      38,     8,    17,     4,     5,     6,    74,    37,    48,    75,
-       7,     8,     9,    24,    60,    61,    21,     4,     5,     6,
-      23,    25,    26,    37,    37,     8,    17,    64,    65,    66,
-      67,    27,    78,    31,    32,    81,    28,    71,     2,     3,
-      25,    26,    72,    90,    91,    92,    63,    33,     2,     3,
-       4,     5,    34,    42,    43,    59,    44,    45,     8,    17,
-       4,     5,     6,    62,    18,    19,    29,    30,     8,     9,
-      52,    53,    54,    55,    56,    57,    68,    69,    29,    30,
-      82,    38,    52,    53,    54,    55,    56,    57,    83,    49,
-      50,    49,    50,    84,    51,    40,    58,    93,    87,     0,
-       0,    39
+      29,     1,    23,     2,     3,    17,    31,    32,    21,    51,
+      52,    48,    49,    39,    53,     4,     5,     6,    22,    43,
+      39,    40,     7,     8,     9,     2,     3,    62,    63,     2,
+       3,    39,    50,    24,    35,    31,    32,     4,     5,    36,
+      28,     4,     5,     6,    30,     8,    18,    39,    39,     8,
+      18,    66,    67,    68,    69,     4,     5,     6,    33,    34,
+      64,    73,    61,     8,    18,    78,    74,    65,    81,     2,
+       3,    84,    51,    52,    70,    87,    25,    60,    26,    27,
+      71,     4,     5,     6,    26,    27,    77,    31,    32,     8,
+       9,    54,    55,    56,    57,    58,    59,    44,    45,    31,
+      32,    80,    40,    54,    55,    56,    57,    58,    59,    46,
+      47,    19,    20,    83,    42,     0,    41
 };
 
 static const yytype_int8 yycheck[] =
 {
-       6,     5,     6,    19,    28,     5,     6,     5,     6,     3,
-      16,     5,     6,    17,    18,    19,    26,    23,    33,    34,
-      20,    25,    26,    17,    18,    19,    70,    33,    34,    73,
-      24,    25,    26,     9,    49,    50,    26,    17,    18,    19,
-      19,    17,    18,    49,    50,    25,    26,    53,    54,    55,
-      56,     0,    76,     7,     8,    79,    23,    63,     5,     6,
-      17,    18,    68,    87,    88,    89,     9,    14,     5,     6,
-      17,    18,    19,    29,    30,    20,    31,    32,    25,    26,
-      17,    18,    19,    21,     2,     3,     5,     6,    25,    26,
-       9,    10,    11,    12,    13,    14,     9,    21,     5,     6,
-      22,    20,     9,    10,    11,    12,    13,    14,    22,    15,
-      16,    15,    16,     4,    20,    24,    20,    22,    21,    -1,
-      -1,    23
+      11,     3,     6,     5,     6,    19,     5,     6,    26,    15,
+      16,    35,    36,    17,    20,    17,    18,    19,    26,    30,
+      24,    20,    24,    25,    26,     5,     6,    51,    52,     5,
+       6,    35,    36,    19,    14,     5,     6,    17,    18,    19,
+       0,    17,    18,    19,    23,    25,    26,    51,    52,    25,
+      26,    55,    56,    57,    58,    17,    18,    19,     7,     8,
+      21,    65,    20,    25,    26,    76,    70,     9,    79,     5,
+       6,    82,    15,    16,     9,    86,     9,    20,    17,    18,
+      21,    17,    18,    19,    17,    18,    75,     5,     6,    25,
+      26,     9,    10,    11,    12,    13,    14,    31,    32,     5,
+       6,    22,    20,     9,    10,    11,    12,    13,    14,    33,
+      34,     2,     3,    22,    25,    -1,    24
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -786,35 +779,34 @@ static const yytype_int8 yycheck[] =
 static const yytype_int8 yystos[] =
 {
        0,     3,     5,     6,    17,    18,    19,    24,    25,    26,
-      28,    39,    42,    43,    44,    45,    19,    26,    45,    45,
-      26,    26,    42,    19,     9,    17,    18,     0,    23,     5,
-       6,     7,     8,    14,    19,    40,    41,    42,    20,    40,
-      39,    28,    43,    43,    44,    44,    41,    41,    42,    15,
-      16,    20,     9,    10,    11,    12,    13,    14,    20,    20,
-      41,    41,    21,     9,    42,    42,    42,    42,     9,    21,
-      37,    42,    42,    38,    37,    37,    29,    32,    28,    33,
-      30,    28,    22,    22,     4,    36,    34,    21,    31,    35,
-      28,    28,    28,    22
+      28,    32,    37,    40,    41,    42,    43,    19,    26,    43,
+      43,    26,    26,    40,    19,     9,    17,    18,     0,    28,
+      23,     5,     6,     7,     8,    14,    19,    38,    39,    40,
+      20,    38,    37,    28,    41,    41,    42,    42,    39,    39,
+      40,    15,    16,    20,     9,    10,    11,    12,    13,    14,
+      20,    20,    39,    39,    21,     9,    40,    40,    40,    40,
+       9,    21,    33,    40,    40,    36,    35,    35,    28,    29,
+      22,    28,    34,    22,    28,    30,    31,    28
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    27,    28,    29,    30,    31,    28,    32,    33,    34,
-      35,    28,    28,    36,    36,    37,    38,    39,    39,    40,
-      40,    40,    41,    41,    41,    41,    41,    41,    41,    41,
-      41,    42,    42,    42,    43,    43,    43,    44,    44,    44,
-      45,    45,    45,    45,    45,    45,    45
+       0,    27,    28,    28,    29,    30,    31,    28,    28,    33,
+      34,    32,    35,    36,    37,    37,    38,    38,    38,    39,
+      39,    39,    39,    39,    39,    39,    39,    39,    40,    40,
+      40,    41,    41,    41,    42,    42,    42,    43,    43,    43,
+      43,    43,    43,    43
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     3,     0,     0,     0,    14,     0,     0,     0,
-       0,    14,     0,     4,     0,     0,     0,     3,     1,     3,
-       3,     1,     3,     3,     3,     3,     4,     4,     3,     2,
-       0,     3,     3,     1,     3,     3,     1,     2,     2,     1,
-       1,     1,     2,     2,     2,     2,     3
+       0,     2,     3,     2,     0,     0,     0,    13,     0,     0,
+       0,    11,     0,     0,     3,     1,     3,     3,     1,     3,
+       3,     3,     3,     4,     4,     3,     2,     0,     3,     3,
+       1,     3,     3,     1,     2,     2,     1,     1,     1,     2,
+       2,     2,     2,     3
 };
 
 
@@ -1278,440 +1270,418 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* StatementList: Statement SEMICOLON StatementList  */
+#line 55 "prob1.y"
+                                      { printf("\n"); }
+#line 1276 "y.tab.c"
+    break;
+
+  case 3: /* StatementList: IfStatement StatementList  */
+#line 56 "prob1.y"
+                                { printf("\n"); }
+#line 1282 "y.tab.c"
+    break;
+
+  case 4: /* $@1: %empty  */
+#line 57 "prob1.y"
+                                                            { printf("\nif %s goto %s:\ngoto %s:", (yyvsp[-4].addr), (yyvsp[-1].lab), (yyvsp[0].lab)); }
+#line 1288 "y.tab.c"
+    break;
+
+  case 5: /* $@2: %empty  */
 #line 58 "prob1.y"
-                                                  { printf("\n"); }
-#line 1284 "y.tab.c"
+                          { printf("\ngoto %s:", (yyvsp[-4].lab)); }
+#line 1294 "y.tab.c"
     break;
 
-  case 3: /* $@1: %empty  */
+  case 6: /* $@3: %empty  */
+#line 58 "prob1.y"
+                                                        { printf("\n%s:", (yyvsp[-4].lab)); }
+#line 1300 "y.tab.c"
+    break;
+
+  case 7: /* StatementList: WHILE LPAREN ComRelExp RPAREN LCURL begin dummyLabels $@1 StatementList RCURL $@2 $@3 StatementList  */
+#line 58 "prob1.y"
+                                                                                               { printf("\n"); }
+#line 1306 "y.tab.c"
+    break;
+
+  case 8: /* StatementList: %empty  */
 #line 59 "prob1.y"
-                                                                          {
-			printf("\nif %s goto %s:\ngoto %s:", (yyvsp[-4].addr), (yyvsp[-1].lab), (yyvsp[0].lab));
-			printf("\n%s:", (yyvsp[-1].lab));
-		}
-#line 1293 "y.tab.c"
+      {}
+#line 1312 "y.tab.c"
     break;
 
-  case 4: /* $@2: %empty  */
-#line 62 "prob1.y"
-                                { printf("\n%s:", (yyvsp[-2].lab)); }
-#line 1299 "y.tab.c"
-    break;
-
-  case 5: /* $@3: %empty  */
-#line 62 "prob1.y"
-                                                                        { printf("\n%s:", genBlockLabel()); }
-#line 1305 "y.tab.c"
-    break;
-
-  case 6: /* StatementList: IF LPAREN ComRelExp RPAREN LCURL dummyLabels dummyLabels $@1 StatementList $@2 RCURL ElseStmt $@3 StatementList  */
-#line 62 "prob1.y"
-                                                                                                                            { printf("\n"); }
-#line 1311 "y.tab.c"
-    break;
-
-  case 7: /* $@4: %empty  */
+  case 9: /* $@4: %empty  */
 #line 63 "prob1.y"
-                                                                        {printf("\nif %s goto %s:\ngoto %s:", (yyvsp[-4].addr), (yyvsp[-1].lab), (yyvsp[0].lab));}
-#line 1317 "y.tab.c"
+                                     { printf("\nif %s goto ", (yyvsp[-2].addr)); }
+#line 1318 "y.tab.c"
     break;
 
-  case 8: /* $@5: %empty  */
-#line 63 "prob1.y"
-                                                                                                                             { printf("\n%s:", (yyvsp[-2].lab)); }
-#line 1323 "y.tab.c"
-    break;
-
-  case 9: /* $@6: %empty  */
+  case 10: /* $@5: %empty  */
 #line 64 "prob1.y"
-                               { printf("\ngoto %s:", (yyvsp[-5].lab)); }
-#line 1329 "y.tab.c"
+                                    { printf("\n%s:", genBlockLabel()); }
+#line 1324 "y.tab.c"
     break;
 
-  case 10: /* $@7: %empty  */
+  case 11: /* IfStatement: IF LPAREN ComRelExp RPAREN LCURL $@4 dummyLabels StatementList RCURL $@5 StatementList  */
 #line 64 "prob1.y"
-                                                            { printf("\n%s:",(yyvsp[-5].lab)); }
-#line 1335 "y.tab.c"
+                                                                                        { printf("\n"); }
+#line 1330 "y.tab.c"
     break;
 
-  case 11: /* StatementList: WHILE LPAREN ComRelExp RPAREN LCURL begin dummyLabels $@4 $@5 StatementList RCURL $@6 $@7 StatementList  */
-#line 64 "prob1.y"
-                                                                                                  { printf("\n"); }
-#line 1341 "y.tab.c"
+  case 12: /* dummyLabels: %empty  */
+#line 73 "prob1.y"
+    { (yyval.lab) = (char*)malloc(100 * sizeof(char)); (yyval.lab) = genBlockLabel(); }
+#line 1336 "y.tab.c"
     break;
 
-  case 12: /* StatementList: %empty  */
-#line 65 "prob1.y"
-                  {}
-#line 1347 "y.tab.c"
+  case 13: /* begin: %empty  */
+#line 76 "prob1.y"
+    { (yyval.lab) = (char*)malloc(100 * sizeof(char)); (yyval.lab) = genBeginLabel(); }
+#line 1342 "y.tab.c"
     break;
 
-  case 13: /* ElseStmt: ELSE LCURL StatementList RCURL  */
-#line 69 "prob1.y"
-                                       {}
+  case 14: /* Statement: IDENTIFIER EQ Statement  */
+#line 79 "prob1.y"
+                            {
+        strcpy((yyval.addr), (yyvsp[-2].addr));
+        strcat((yyval.addr), "=");
+        strcat((yyval.addr), (yyvsp[0].addr));
+        printf("\n%s", (yyval.addr));
+    }
 #line 1353 "y.tab.c"
     break;
 
-  case 14: /* ElseStmt: %empty  */
-#line 70 "prob1.y"
-          { }
+  case 15: /* Statement: Term  */
+#line 85 "prob1.y"
+           { strcpy((yyval.addr), (yyvsp[0].addr)); }
 #line 1359 "y.tab.c"
     break;
 
-  case 15: /* dummyLabels: %empty  */
-#line 74 "prob1.y"
-           { (yyval.lab) = (char*)malloc(100*sizeof(char)); (yyval.lab) = genBlockLabel(); }
-#line 1365 "y.tab.c"
-    break;
-
-  case 16: /* begin: %empty  */
-#line 79 "prob1.y"
-           { (yyval.lab) = (char*)malloc(100*sizeof(char)); (yyval.lab) = genBeginLabel(); }
-#line 1371 "y.tab.c"
-    break;
-
-  case 17: /* Statement: IDENTIFIER EQ Statement  */
-#line 82 "prob1.y"
-                                {
-		strcpy((yyval.addr), (yyvsp[-2].addr));
-		strcat((yyval.addr), "=");
-		strcat((yyval.addr), (yyvsp[0].addr));
-		printf("\n%s", (yyval.addr));  
-	}
-#line 1382 "y.tab.c"
-    break;
-
-  case 18: /* Statement: Term  */
+  case 16: /* ComRelExp: ComRelExp AND Relexp  */
 #line 89 "prob1.y"
+                         {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, "&&");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1373 "y.tab.c"
+    break;
+
+  case 17: /* ComRelExp: ComRelExp OR Relexp  */
+#line 98 "prob1.y"
+                          {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, "||");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1387 "y.tab.c"
+    break;
+
+  case 18: /* ComRelExp: Relexp  */
+#line 107 "prob1.y"
              { strcpy((yyval.addr), (yyvsp[0].addr)); }
-#line 1388 "y.tab.c"
+#line 1393 "y.tab.c"
     break;
 
-  case 19: /* ComRelExp: ComRelExp AND Relexp  */
-#line 93 "prob1.y"
-                              {
-                strcpy((yyval.addr), genLabel());
-                strcpy(str, (yyval.addr));
-                strcat(str, "=");
-                strcat(str, (yyvsp[-2].addr));
-                strcat(str, "&&");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str);
-        }
-#line 1402 "y.tab.c"
+  case 19: /* Relexp: Term LT Term  */
+#line 111 "prob1.y"
+                 {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, "<");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1407 "y.tab.c"
     break;
 
-  case 20: /* ComRelExp: ComRelExp OR Relexp  */
-#line 103 "prob1.y"
-                            {
-                strcpy((yyval.addr), genLabel());
-                strcpy(str, (yyval.addr));
-                strcat(str, "=");
-                strcat(str, (yyvsp[-2].addr));
-                strcat(str, "||");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str);
-        }
-#line 1416 "y.tab.c"
+  case 20: /* Relexp: Term LTE Term  */
+#line 120 "prob1.y"
+                    {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, "<=");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1421 "y.tab.c"
     break;
 
-  case 21: /* ComRelExp: Relexp  */
-#line 113 "prob1.y"
-               { strcpy((yyval.addr), (yyvsp[0].addr)); }
-#line 1422 "y.tab.c"
+  case 21: /* Relexp: Term GT Term  */
+#line 129 "prob1.y"
+                   {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, ">");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1435 "y.tab.c"
     break;
 
-  case 22: /* Relexp: Term LT Term  */
-#line 117 "prob1.y"
-                     {
-		strcpy((yyval.addr), genLabel());
-		strcpy(str, (yyval.addr));
-		strcat(str, "=");
-		strcat(str, (yyvsp[-2].addr));
-		strcat(str, "<");
-		strcat(str, (yyvsp[0].addr));
-		printf("\n%s", str);
-	}
-#line 1436 "y.tab.c"
+  case 22: /* Relexp: Term GTE Term  */
+#line 138 "prob1.y"
+                    {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, ">=");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1449 "y.tab.c"
     break;
 
-  case 23: /* Relexp: Term LTE Term  */
-#line 127 "prob1.y"
-                      {
-                strcpy((yyval.addr), genLabel());
-                strcpy(str, (yyval.addr));
-		strcat(str, "=");
-                strcat(str, (yyvsp[-2].addr));
-                strcat(str, "<=");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str);
-        }
-#line 1450 "y.tab.c"
-    break;
-
-  case 24: /* Relexp: Term GT Term  */
-#line 137 "prob1.y"
-                     {
-                strcpy((yyval.addr), genLabel());
-                strcpy(str, (yyval.addr));
-		strcat(str, "=");
-                strcat(str, (yyvsp[-2].addr));
-                strcat(str, ">");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str);
-        }
-#line 1464 "y.tab.c"
-    break;
-
-  case 25: /* Relexp: Term GTE Term  */
+  case 23: /* Relexp: Term EQ EQ Term  */
 #line 147 "prob1.y"
                       {
-                strcpy((yyval.addr), genLabel());
-                strcpy(str, (yyval.addr));
-		strcat(str, "=");
-                strcat(str, (yyvsp[-2].addr));
-                strcat(str, ">=");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str);
-        }
-#line 1478 "y.tab.c"
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-3].addr));
+        strcat(str, "==");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1463 "y.tab.c"
     break;
 
-  case 26: /* Relexp: Term EQ EQ Term  */
-#line 157 "prob1.y"
-                        {
-                strcpy((yyval.addr), genLabel());
-                strcpy(str, (yyval.addr));
-		strcat(str, "=");
-                strcat(str, (yyvsp[-3].addr));
-                strcat(str, "==");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str);
-        }
+  case 24: /* Relexp: Term NOT EQ Term  */
+#line 156 "prob1.y"
+                       {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-3].addr));
+        strcat(str, "!=");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1477 "y.tab.c"
+    break;
+
+  case 25: /* Relexp: LPAREN Relexp RPAREN  */
+#line 165 "prob1.y"
+                           {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, "!");
+        strcat(str, "(");
+        strcat(str, (yyvsp[-1].addr));
+        strcat(str, ")");
+        printf("\n%s", str);
+    }
 #line 1492 "y.tab.c"
     break;
 
-  case 27: /* Relexp: Term NOT EQ Term  */
-#line 167 "prob1.y"
-                         {
-                strcpy((yyval.addr), genLabel());
-                strcpy(str, (yyval.addr));
-		strcat(str, "=");
-                strcat(str, (yyvsp[-3].addr));
-                strcat(str, "!=");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str);
-        }
-#line 1506 "y.tab.c"
+  case 26: /* Relexp: NOT Relexp  */
+#line 175 "prob1.y"
+                 {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, "!");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1505 "y.tab.c"
     break;
 
-  case 28: /* Relexp: LPAREN Relexp RPAREN  */
-#line 177 "prob1.y"
-                             {
-                strcpy((yyval.addr), genLabel());
-                strcpy(str, (yyval.addr));
-		strcat(str, "=");
-                strcat(str, "!");
-         	strcat(str, "(");
-                strcat(str, (yyvsp[-1].addr));
-		strcat(str, ")");
-                printf("\n%s", str);
-        }
-#line 1521 "y.tab.c"
+  case 27: /* Relexp: %empty  */
+#line 183 "prob1.y"
+      {}
+#line 1511 "y.tab.c"
     break;
 
-  case 29: /* Relexp: NOT Relexp  */
-#line 188 "prob1.y"
-                   {
-                strcpy((yyval.addr), genLabel());
-                strcpy(str, (yyval.addr));
-		strcat(str, "=");
-                strcat(str, "!");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str);
-        }
-#line 1534 "y.tab.c"
+  case 28: /* Term: Term ADD Factor  */
+#line 187 "prob1.y"
+                    {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, "+");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1525 "y.tab.c"
     break;
 
-  case 30: /* Relexp: %empty  */
+  case 29: /* Term: Term SUB Factor  */
 #line 196 "prob1.y"
-          {}
-#line 1540 "y.tab.c"
+                      {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, "-");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1539 "y.tab.c"
     break;
 
-  case 31: /* Term: Term ADD Factor  */
-#line 201 "prob1.y"
-                        {
-		strcpy((yyval.addr), genLabel());
-		strcpy(str, (yyval.addr));
-		strcat(str, "=");
-		strcat(str, (yyvsp[-2].addr));
-		strcat(str, "+");
-		strcat(str, (yyvsp[0].addr));
-		printf("\n%s", str);
-	}
-#line 1554 "y.tab.c"
+  case 30: /* Term: Factor  */
+#line 205 "prob1.y"
+             { strcpy((yyval.addr), (yyvsp[0].addr)); }
+#line 1545 "y.tab.c"
     break;
 
-  case 32: /* Term: Term SUB Factor  */
-#line 210 "prob1.y"
-                          {
-		strcpy((yyval.addr), genLabel());
-		strcpy(str, (yyval.addr));
-		strcat(str, "=");
-		strcat(str, (yyvsp[-2].addr));
-                strcat(str, "-");
-                strcat(str, (yyvsp[0].addr));
-      		printf("\n%s", str);
-	}
-#line 1568 "y.tab.c"
+  case 31: /* Factor: Factor MUL SIGNVal  */
+#line 209 "prob1.y"
+                       {
+        char* g = genLabel();
+        strcpy((yyval.addr), g);
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, "*");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
+#line 1560 "y.tab.c"
     break;
 
-  case 33: /* Term: Factor  */
+  case 32: /* Factor: Factor DIV SIGNVal  */
 #line 219 "prob1.y"
-                 { strcpy((yyval.addr), (yyvsp[0].addr)); }
+                         {
+        strcpy((yyval.addr), genLabel());
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-2].addr));
+        strcat(str, "/");
+        strcat(str, (yyvsp[0].addr));
+        printf("\n%s", str);
+    }
 #line 1574 "y.tab.c"
     break;
 
-  case 34: /* Factor: Factor MUL SIGNVal  */
-#line 223 "prob1.y"
-                           { 
-		char* g = genLabel();
-		strcpy((yyval.addr), g);
-		strcpy(str, (yyval.addr));
-		strcat(str, "=");
-		strcat(str, (yyvsp[-2].addr));
-                strcat(str, "*");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str);
-	}
+  case 33: /* Factor: SIGNVal  */
+#line 228 "prob1.y"
+              { strcpy((yyval.addr), (yyvsp[0].addr)); }
+#line 1580 "y.tab.c"
+    break;
+
+  case 34: /* SIGNVal: ADD Val  */
+#line 232 "prob1.y"
+            {
+        strcpy((yyval.addr), "+");
+        strcat((yyval.addr), (yyvsp[0].addr));
+    }
 #line 1589 "y.tab.c"
     break;
 
-  case 35: /* Factor: Factor DIV SIGNVal  */
-#line 233 "prob1.y"
-                             {
-		strcpy((yyval.addr), genLabel());
-		strcpy(str, (yyval.addr));
-		strcat((yyval.addr), "=");
-		strcat((yyval.addr), (yyvsp[-2].addr));
-                strcat(str, "/");
-                strcat(str, (yyvsp[0].addr));
-                printf("\n%s", str); 
-	}
-#line 1603 "y.tab.c"
+  case 35: /* SIGNVal: SUB Val  */
+#line 236 "prob1.y"
+              {
+        strcpy((yyval.addr), "-");
+        strcat((yyval.addr), (yyvsp[0].addr));
+    }
+#line 1598 "y.tab.c"
     break;
 
-  case 36: /* Factor: SIGNVal  */
-#line 242 "prob1.y"
-                  { strcpy((yyval.addr), (yyvsp[0].addr)); }
-#line 1609 "y.tab.c"
+  case 36: /* SIGNVal: Val  */
+#line 240 "prob1.y"
+          { strcpy((yyval.addr), (yyvsp[0].addr)); }
+#line 1604 "y.tab.c"
     break;
 
-  case 37: /* SIGNVal: ADD Val  */
-#line 246 "prob1.y"
-                {
-		strcpy((yyval.addr), "+");
-		strcat((yyval.addr), (yyvsp[0].addr)); 
-	}
-#line 1618 "y.tab.c"
+  case 37: /* Val: IDENTIFIER  */
+#line 244 "prob1.y"
+               {
+        strcpy((yyval.addr), (yyvsp[0].addr));
+    }
+#line 1612 "y.tab.c"
     break;
 
-  case 38: /* SIGNVal: SUB Val  */
-#line 250 "prob1.y"
-                  { 
-		strcpy((yyval.addr), "-");
-		strcat((yyval.addr), (yyvsp[0].addr)); 
-	}
-#line 1627 "y.tab.c"
+  case 38: /* Val: NUMBER  */
+#line 247 "prob1.y"
+             {
+        char* buf = (char*)malloc(sizeof(char) * 1000);
+        int dummyLabels = (yyvsp[0].dval);
+        sprintf(buf, "%d", dummyLabels);
+        strcpy((yyval.addr), buf);
+    }
+#line 1623 "y.tab.c"
     break;
 
-  case 39: /* SIGNVal: Val  */
-#line 254 "prob1.y"
-              { strcpy((yyval.addr), (yyvsp[0].addr)); }
-#line 1633 "y.tab.c"
+  case 39: /* Val: PADD IDENTIFIER  */
+#line 253 "prob1.y"
+                      {
+        strcpy((yyval.addr), (yyvsp[0].addr));
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[0].addr));
+        strcat(str, "+1");
+        printf("\n%s", str);
+    }
+#line 1636 "y.tab.c"
     break;
 
-  case 40: /* Val: IDENTIFIER  */
-#line 258 "prob1.y"
-                   { 
-		strcpy((yyval.addr), (yyvsp[0].addr)); 
-	}
-#line 1641 "y.tab.c"
-    break;
-
-  case 41: /* Val: NUMBER  */
+  case 40: /* Val: PSUB IDENTIFIER  */
 #line 261 "prob1.y"
-                 { 
-		char* buf = (char*)malloc(sizeof(char)*1000);
-		int dummyLabels = (yyvsp[0].dval);
-		sprintf(buf, "%d", dummyLabels);
-		strcpy((yyval.addr), buf);
-	}
-#line 1652 "y.tab.c"
+                      {
+        strcpy((yyval.addr), (yyvsp[0].addr));
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[0].addr));
+        strcat(str, "-1");
+        printf("\n%s", str);
+    }
+#line 1649 "y.tab.c"
     break;
 
-  case 42: /* Val: PADD IDENTIFIER  */
-#line 267 "prob1.y"
-                          {
-		strcpy((yyval.addr), (yyvsp[0].addr));
-		strcpy(str, (yyval.addr));
-		strcat(str, "="); 
-		strcat(str, (yyvsp[0].addr));
-		strcat(str, "+1");
-		printf("\n%s", str); 
-	}
-#line 1665 "y.tab.c"
+  case 41: /* Val: IDENTIFIER PADD  */
+#line 269 "prob1.y"
+                      {
+        strcpy((yyval.addr), (yyvsp[-1].addr));
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-1].addr));
+        strcat(str, "+1");
+        printf("\n%s", str);
+    }
+#line 1662 "y.tab.c"
     break;
 
-  case 43: /* Val: PSUB IDENTIFIER  */
-#line 275 "prob1.y"
-                          { 
-		strcpy((yyval.addr), (yyvsp[0].addr));
-                strcpy(str, (yyval.addr));
-                strcat(str, "=");
-                strcat(str, (yyvsp[0].addr));
-		strcat(str, "-1");
-                printf("\n%s", str); 
-	}
-#line 1678 "y.tab.c"
+  case 42: /* Val: IDENTIFIER PSUB  */
+#line 277 "prob1.y"
+                      {
+        strcpy((yyval.addr), (yyvsp[-1].addr));
+        strcpy(str, (yyval.addr));
+        strcat(str, "=");
+        strcat(str, (yyvsp[-1].addr));
+        strcat(str, "-1");
+        printf("\n%s", str);
+    }
+#line 1675 "y.tab.c"
     break;
 
-  case 44: /* Val: IDENTIFIER PADD  */
-#line 283 "prob1.y"
-                          { 
-		strcpy((yyval.addr), (yyvsp[-1].addr));
-                strcpy(str, (yyval.addr));
-                strcat(str, "=");
-                strcat(str, (yyvsp[-1].addr));
-                strcat(str, "+1");
-                printf("\n%s", str);
-	}
-#line 1691 "y.tab.c"
-    break;
-
-  case 45: /* Val: IDENTIFIER PSUB  */
-#line 291 "prob1.y"
-                          { 
-		strcpy((yyval.addr), (yyvsp[-1].addr));
-                strcpy(str, (yyval.addr));
-                strcat(str, "=");
-                strcat(str, (yyvsp[-1].addr));
-                strcat(str, "-1");
-                printf("\n%s", str);
-		 
-	}
-#line 1705 "y.tab.c"
-    break;
-
-  case 46: /* Val: LPAREN Term RPAREN  */
-#line 300 "prob1.y"
-                             { strcpy((yyval.addr), (yyvsp[-1].addr)); }
-#line 1711 "y.tab.c"
+  case 43: /* Val: LPAREN Term RPAREN  */
+#line 285 "prob1.y"
+                         { strcpy((yyval.addr), (yyvsp[-1].addr)); }
+#line 1681 "y.tab.c"
     break;
 
 
-#line 1715 "y.tab.c"
+#line 1685 "y.tab.c"
 
       default: break;
     }
@@ -1904,54 +1874,50 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 303 "prob1.y"
+#line 288 "prob1.y"
 
 
-void yyerror(char* s){
-        while(yylex() != SEMICOLON && yylex() != EOF);
-        printf("Rejected EXPR\n");
-        yyparse();
+void yyerror(char* s) {
+    while (yylex() != SEMICOLON && yylex() != EOF);
+    printf("Rejected EXPR\n");
+    yyparse();
 }
 
-char* genLabel(){
-	char* s = (char*)malloc(sizeof(char)*1000);
-	char* label = (char*)malloc(sizeof(char)*1000);
-	strcpy(s, "t");
-	sprintf(label, "%d", t);
-	strcat(s, label);
-	t++;
-	return s;
+char* genLabel() {
+    char* s = (char*)malloc(sizeof(char) * 1000);
+    char* label = (char*)malloc(sizeof(char) * 1000);
+    strcpy(s, "t");
+    sprintf(label, "%d", t);
+    strcat(s, label);
+    t++;
+    return s;
 }
 
-char* genBlockLabel(){
-        char* s = (char*)malloc(sizeof(char)*1000);
-        char* label = (char*)malloc(sizeof(char)*1000);
-        strcpy(s, "L");
-        sprintf(label, "%d", l);
-        strcat(s, label);
-	l++;
-        return s;
+char* genBlockLabel() {
+    char* s = (char*)malloc(sizeof(char) * 1000);
+    char* label = (char*)malloc(sizeof(char) * 1000);
+    strcpy(s, "L");
+    sprintf(label, "%d", l);
+    strcat(s, label);
+    l++;
+    return s;
 }
 
-
-char* genBeginLabel(){
-        char* s = (char*)malloc(sizeof(char)*1000);
-        char* label = (char*)malloc(sizeof(char)*1000);
-        strcpy(s, "BEGIN\t");
-        sprintf(label, "%d", l);
-        strcat(s, label);
-	w++;
-        return s;
+char* genBeginLabel() {
+    char* s = (char*)malloc(sizeof(char) * 1000);
+    char* label = (char*)malloc(sizeof(char) * 1000);
+    strcpy(s, "BEGIN");
+    sprintf(label, "%d", l);
+    strcat(s, label);
+    w++;
+    return s;
 }
 
-
-int main(int argc, char* argv[])
-{
-        if(argc > 1)
-        {
-                FILE *fp = fopen(argv[1], "r");
-                if(fp) yyin = fp;
-        }
-        yyparse();
-        return 0;
+int main(int argc, char* argv[]) {
+    if (argc > 1) {
+        FILE* fp = fopen(argv[1], "r");
+        if (fp) yyin = fp;
+    }
+    yyparse();
+    return 0;
 }
