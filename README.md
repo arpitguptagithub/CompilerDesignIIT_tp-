@@ -18,7 +18,7 @@ Welcome to the Compiler Design Lab! This repository contains the resources and i
 
 ## Introduction
 
-In this lab, you'll dive into compiler design concepts by working with Lex and Makefile. These tools are fundamental for building compilers and automating build processes. The provided demo files and exercises will help you gain practical experience.
+In this lab, you'll dive into compiler design concepts by working with Lex and Makefile. These tools are fundamental for building compilers and automating build processes. The provided demo files and exercises will help you gain practical experience. The implementation of the last lab 11 includes things like symboltable, error handling for variable declaration(int,char ,double, float) , switch , while , for , if elseif ladder. 
 
 ## Contents
 
