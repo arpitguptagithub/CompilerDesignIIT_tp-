@@ -91,7 +91,8 @@ extern int yydebug;
     CHAR = 292,                    /* CHAR  */
     CHARCONST = 293,               /* CHARCONST  */
     NUMBER = 294,                  /* NUMBER  */
-    IDENTIFIER = 295               /* IDENTIFIER  */
+    STRINGCONST = 295,             /* STRINGCONST  */
+    IDENTIFIER = 296               /* IDENTIFIER  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -137,22 +138,23 @@ extern int yydebug;
 #define CHAR 292
 #define CHARCONST 293
 #define NUMBER 294
-#define IDENTIFIER 295
+#define STRINGCONST 295
+#define IDENTIFIER 296
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 66 "prob1.y"
+#line 64 "prob1.y"
 
     char lexeme[100];
-    char addr[200];
+    char addr[200];   // trying to achieve inherent variable without defining a struct
     char addCase[200];
     char* lab;
     int dval;
     char cval;
 
-#line 156 "y.tab.h"
+#line 158 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

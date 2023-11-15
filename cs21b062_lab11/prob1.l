@@ -46,6 +46,7 @@
 "["                                     { return LBRACK; }
 "]"                                     { return RBRACK; }
 [a-zA-Z][a-zA-Z0-9]*                    { strcpy(yylval.lexeme, yytext) ; return IDENTIFIER; }
+\"[a-zA-Z0-9]*\"                        { strcpy(yylval.lexeme, yytext) ; return STRINGCONST; }
 [ \t\n]+                                {};     
 .                                       {return yytext[0];}; 
 <<EOF>>                                 { return 0; }

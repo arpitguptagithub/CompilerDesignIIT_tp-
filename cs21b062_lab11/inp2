@@ -1,12 +1,21 @@
-switch ( arpit )
-{
-    case arpit :  a++ ; 
-             
+int a =0 ;
+int b =0; 
+int d =0;
+int c , k=0 ;
 
-                  break; 
-    case ashu  :  b++ ; 
-                  break; 
-    default : 
-            c++; 
+
+while ( a> 0 )
+{  
+    int kl ;
+    a ++ ; b++; d++;  
+ int h = 10;
+
+
+while (k >1)
+{
+    int t = 10;
 }
-m++;
+
+
+
+}

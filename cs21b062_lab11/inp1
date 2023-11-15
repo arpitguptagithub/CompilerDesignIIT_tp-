@@ -1,12 +1,29 @@
-int a = 10.1;
-int b = 20;
-int ml;
-int h, u , k ;
-int ml;
-{
-    int L= 10;
-    int d = 20;
+int a , b , d, m = 10 ;
+int c , k=0 ;  
+char ml = 20 ;
+if(a>0){
+    a++;
 }
-int c = 30;
-int t;
+else if (d<k)
+{  
 
+    if (a>k || b<d)
+    {
+        a++;
+    }
+    else
+    {
+        a--;
+    }
+
+    b++;
+    }
+
+    m++;
+
+else{
+    
+    b--;
+}
+
+c++;

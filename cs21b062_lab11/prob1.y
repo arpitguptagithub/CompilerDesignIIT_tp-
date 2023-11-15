@@ -7,9 +7,6 @@ void yyerror(char*);
 int yylex();
 extern FILE* yyin;
 
-
-
-
 char str[1000];
 char* genLabel();
 char* genBlockLabel();
@@ -45,6 +42,7 @@ typedef struct {
 Symbol* symtab[10000];
 void HandleSymTble(char* identifier, char* number, char* symtype, int* symcount, int* addrCount, Symbol** symtab) ;
 char* symtype;
+char* locationforIfelse;
 void verify(char * id );
 int addrCount= 0; 
 int symcount = 0;
@@ -65,7 +63,7 @@ int symcount_stack[1000];
 
 %union {
     char lexeme[100];
-    char addr[200];
+    char addr[200];   // trying to achieve inherent variable without defining a struct
     char addCase[200];
     char* lab;
     int dval;
@@ -73,6 +71,7 @@ int symcount_stack[1000];
 }
 %token <cval> CHARCONST
 %token <dval> NUMBER
+%token <addr> STRINGCONST
 %token <addr> IDENTIFIER 
 %type <addr> StatementList
 %type <addr> IfStatement
@@ -90,6 +89,9 @@ int symcount_stack[1000];
 %type <addr> Factor
 %type <addr> SIGNVal
 %type <addr> Val
+%type <addr> ElseIfStatement
+%type <addr> CmpStm
+
 %type <addCase> CaseVal
 %type <addr> CaseStatements
 %type <addr> BreakStmt
@@ -101,8 +103,8 @@ int symcount_stack[1000];
 StatementList:
     DeclarationList StatementList { printf("\n"); }
     | Statement SEMICOLON StatementList { printf("\n"); }
-    | IfStatement StatementList { printf("\n"); }
-    | WHILE LPAREN ComRelExp RPAREN LCURL begin dummyLabels { printf("\nif %s goto %s:\ngoto %s:", $3, $6, $7); }
+    | IfStatement 
+    | WHILE LPAREN ComRelExp RPAREN LCURL begin dummyLabels dummyLabels { printf("\n%s\nif %s goto %s:\ngoto %s: \n%s:",$6 ,$3, $8, $7, $8); }
       StatementList RCURL { printf("\ngoto %s:", $6); } { printf("\n%s:", $7); } StatementList { printf("\n"); }
     | SwitchStatement StatementList { printf("\n"); }  
     |{}
@@ -218,15 +220,24 @@ BreakStmt :
     BREAK SEMICOLON { printf("goto %s\n", OutLabel(Ocount)); }
 
 IfStatement:
-    IF LPAREN ComRelExp RPAREN dummyLabels LCURL { printf("\nifFalse %s goto %s ", $3, $5); }
-     StatementList RCURL{ printf("\n%s:", $5); } ElseStmt StatementList { printf("\n"); }
+    IF LPAREN CmpStm RPAREN dummyLabels LCURL { printf("\nifFalse %s goto %s ", $3, $5); }
+     StatementList dummyLabels{ locationforIfelse = (char*)malloc(100 * sizeof(char));   ;strcpy(locationforIfelse, $9); 
+     printf("\ngoto %s :", $9); } RCURL{ printf("\n%s:", $5); } ElseIfStatement { printf("\n%s:", $9);} StatementList  {printf("\n");}
     ;
+
+
+ElseIfStatement: 
+    ELSE IF LPAREN CmpStm RPAREN dummyLabels LCURL { printf("\nifFalse %s goto %s ", $4, $6); }
+     StatementList { printf("\ngoto %s :", locationforIfelse); } RCURL{ printf("\n%s:", $6); } ElseStmt { printf("\n%s:", locationforIfelse);} StatementList  {printf("\n");}
+     | ElseStmt { printf("\n"); }
 
 ElseStmt:
     ELSE LCURL StatementList RCURL {}
-    | ELSE IfStatement {}
     | {}
     ;
+
+CmpStm: ComRelExp | Statement ;
+
 
 dummyLabels:
     { $$ = (char*)malloc(100 * sizeof(char)); $$ = genBlockLabel(); }
@@ -243,7 +254,8 @@ Statement:
         strcat($$, $3);
         printf("\n%s", $$);
     }
-    | Term { strcpy($$, $1); }
+    | 
+    Term { strcpy($$, $1); }
     ;
 
 ComRelExp:
@@ -405,7 +417,7 @@ SIGNVal:
 
 CaseVal: 
      IDENTIFIER {
-        
+        verify($1);
         strcpy($$, $1);
     }
     | NUMBER    {
@@ -418,6 +430,7 @@ CaseVal:
 
 Val:
     IDENTIFIER {
+        verify($1);
         strcpy($$, $1);
     }
     | NUMBER {
@@ -427,6 +440,7 @@ Val:
         strcpy($$, buf);
     }
     | PADD IDENTIFIER {
+        verify($2);
         strcpy($$, $2);
         strcpy(str, $$);
         strcat(str, "=");
@@ -435,6 +449,7 @@ Val:
         printf("\n%s", str);
     }
     | PSUB IDENTIFIER {
+        verify($2);
         strcpy($$, $2);
         strcpy(str, $$);
         strcat(str, "=");
@@ -443,6 +458,7 @@ Val:
         printf("\n%s", str);
     }
     | IDENTIFIER PADD {
+        verify($1);
         strcpy($$, $1);
         strcpy(str, $$);
         strcat(str, "=");
@@ -451,6 +467,7 @@ Val:
         printf("\n%s", str);
     }
     | IDENTIFIER PSUB {
+        verify($1);
         strcpy($$, $1);
         strcpy(str, $$);
         strcat(str, "=");
