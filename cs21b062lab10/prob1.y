@@ -60,7 +60,6 @@ int Ocount = 0;
 %type <addr> BreakStmt
 %type <lab> dummyLabels
 %type <lab> begin
-//%type <lab> Out 
 
 %%
 
@@ -89,13 +88,14 @@ BreakStmt :
     BREAK SEMICOLON { printf("goto %s\n", OutLabel(Ocount)); }
 
 IfStatement:
-    IF LPAREN ComRelExp RPAREN LCURL { printf("\nif %s goto ", $3); }
-    dummyLabels StatementList RCURL { printf("\n%s:", genBlockLabel()); } StatementList { printf("\n"); }
+    IF LPAREN ComRelExp RPAREN dummyLabels LCURL { printf("\nifFalse %s goto %s ", $3, $5); }
+     StatementList RCURL{ printf("\n%s:", $5); } ElseStmt StatementList { printf("\n"); }
     ;
 
 ElseStmt:
     ELSE LCURL StatementList RCURL {}
-    | { }
+    | ELSE IfStatement {}
+    | {}
     ;
 
 dummyLabels:
@@ -104,8 +104,6 @@ dummyLabels:
 begin:
     { $$ = (char*)malloc(100 * sizeof(char)); $$ = genBeginLabel(); }
 
-/*Out:
-    { $$ = (char*)malloc(100 * sizeof(char)); $$ = genOutLabel(); }*/
 
 Statement:
     IDENTIFIER EQ Statement {
@@ -248,8 +246,9 @@ Factor:
         strcat(str, $3);
         printf("\n%s", str);
     }
-    | Factor DIV SIGNVal {
-        strcpy($$, genLabel());
+    |Factor DIV SIGNVal {
+        char* g = genLabel();
+        strcpy($$, g);
         strcpy(str, $$);
         strcat(str, "=");
         strcat(str, $1);
@@ -353,6 +352,8 @@ char* genBlockLabel() {
     char* s = (char*)malloc(sizeof(char) * 1000);
     char* label = (char*)malloc(sizeof(char) * 1000);
     strcpy(s, "L");
+/*Out:
+    { $$ = (char*)malloc(100 * sizeof(char)); $$ = genOutLabel(); }*/
     sprintf(label, "%d", l);
     strcat(s, label);
     l++;
