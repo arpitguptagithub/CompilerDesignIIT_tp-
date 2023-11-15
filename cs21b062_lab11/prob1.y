@@ -7,26 +7,29 @@ void yyerror(char*);
 int yylex();
 extern FILE* yyin;
 
+
+
+
 char str[1000];
 char* genLabel();
 char* genBlockLabel();
 char* genOutLabel();
 char* genBeginLabel();
 char* OutLabel(int Ocount);
+void add_symbol(char* name, char* type, int val , char* addr);
 
-//for labels some global variables 
+
 int t = 0;
 int l = 0;
 int w = 0;
 int z = 0 ; 
-void add_symbol(char* name, char* type, int val , char* NonTerminalAddr);
-
 int count = 1;
 int stackCount = 1;
 // stack for storing the labels
 char* stack[1000] ;
 int Ocount = 0;
-// struct for storing the symbol table
+
+
 typedef struct {
     char* name;
      char* type;
@@ -36,7 +39,7 @@ typedef struct {
         float floatval;
         char charval;
     } val;
-    char NonTerminalAddr[200];
+    char addr[200];
 } Symbol;
 
 Symbol* symtab[10000];
@@ -62,15 +65,36 @@ int symcount_stack[1000];
 
 %union {
     char lexeme[100];
-    char NonTerminalAddr[200];
+    char addr[200];
+    char addCase[200];
     char* lab;
     int dval;
     char cval;
 }
 %token <cval> CHARCONST
 %token <dval> NUMBER
-%token <NonTerminalAddr> IDENTIFIER StatementList IfStatement SwitchStatement ElseStmt ComplexRelExp RelExp Statement ConstIden Bracket Declaration Type variablelist Term Factor SignVal Val CaseVal CaseStatements BreakStmt 
-%type <lab> getLabels begin
+%token <addr> IDENTIFIER 
+%type <addr> StatementList
+%type <addr> IfStatement
+%type <addr> SwitchStatement 
+%type <addr> ElseStmt
+%type <addr> ComRelExp
+%type <addr> Relexp
+%type <addr> Statement
+%type <addr> ConstIden
+%type <addr> Bracket
+%type <addr> Declaration
+%type <addr> type
+%type <addr> variablelist
+%type <addr> Term
+%type <addr> Factor
+%type <addr> SIGNVal
+%type <addr> Val
+%type <addCase> CaseVal
+%type <addr> CaseStatements
+%type <addr> BreakStmt
+%type <lab> dummyLabels
+%type <lab> begin
 
 %%
 
@@ -78,7 +102,7 @@ StatementList:
     DeclarationList StatementList { printf("\n"); }
     | Statement SEMICOLON StatementList { printf("\n"); }
     | IfStatement StatementList { printf("\n"); }
-    | WHILE LPAREN ComplexRelExp RPAREN LCURL begin getLabels { printf("\nif %s goto %s:\ngoto %s:", $3, $6, $7); }
+    | WHILE LPAREN ComRelExp RPAREN LCURL begin dummyLabels { printf("\nif %s goto %s:\ngoto %s:", $3, $6, $7); }
       StatementList RCURL { printf("\ngoto %s:", $6); } { printf("\n%s:", $7); } StatementList { printf("\n"); }
     | SwitchStatement StatementList { printf("\n"); }  
     |{}
@@ -91,11 +115,11 @@ DeclarationList:
     ;
 
 Declaration:
-    LCURL { /* save state */ symcount_stack[++stackCount] = addrCount; /* set base NonTerminalAddr to 0 */ addrCount = 0; } DeclarationList RCURL { /* restore state */ addrCount = symcount_stack[stackCount--]; }
-    | Type variablelist SEMICOLON 
+    LCURL { /* save state */ symcount_stack[++stackCount] = addrCount; /* set base addr to 0 */ addrCount = 0; } DeclarationList RCURL { /* restore state */ addrCount = symcount_stack[stackCount--]; }
+    | type variablelist SEMICOLON 
     ;
 
-Type: 
+type: 
     INT { 
        strcpy($$, "INT"); 
        symtype = (char*)malloc(sizeof(char)*10);
@@ -154,8 +178,8 @@ variablelist:  IDENTIFIER  COMMA variablelist {
 Bracket : LBRACK NUMBER RBRACK 
        {
          char* buf = (char*)malloc(sizeof(char) * 1000);
-             int getLabels = $2;
-        sprintf(buf, "%d", getLabels);
+             int dummyLabels = $2;
+        sprintf(buf, "%d", dummyLabels);
         strcpy($$, buf);
       }
     | LBRACK NUMBER RBRACK Bracket { printf("\n"); }
@@ -176,14 +200,16 @@ ConstIden: Val
  }
     ;
 
+
+
 SwitchStatement:
     SWITCH LPAREN CaseVal  {count++; stack[count] = (char*)malloc(sizeof(char) * 1000); strcpy(stack[count], $3); } RPAREN LCURL 
-    CaseStatements RCURL  {printf("\n%s:" , genOutLabel()); Ocount++ ;count --; } StatementList { printf("\n"); }
+     CaseStatements RCURL  {printf("\n%s:" , genOutLabel()); Ocount++ ;count --; } StatementList { printf("\n"); }
     ;
 
 CaseStatements:
-    CASE CaseVal COLON getLabels { printf("\nifFalse (%s == %s) goto %s", stack[count], $2, $4);}
-    StatementList BreakStmt { printf("\n%s:",$4);} CaseStatements  
+    CASE CaseVal COLON dummyLabels { printf("\nifFalse (%s == %s) goto %s", stack[count], $2, $4);}
+     StatementList BreakStmt { printf("\n%s:",$4);} CaseStatements  
     | DEFAULT COLON StatementList { printf("\n"); }
     | {}/* Empty case, no code to generate */
     ;
@@ -192,8 +218,8 @@ BreakStmt :
     BREAK SEMICOLON { printf("goto %s\n", OutLabel(Ocount)); }
 
 IfStatement:
-    IF LPAREN ComplexRelExp RPAREN getLabels LCURL { printf("\nifFalse %s goto %s ", $3, $5); }
-    StatementList RCURL{ printf("\n%s:", $5); } ElseStmt StatementList { printf("\n"); }
+    IF LPAREN ComRelExp RPAREN dummyLabels LCURL { printf("\nifFalse %s goto %s ", $3, $5); }
+     StatementList RCURL{ printf("\n%s:", $5); } ElseStmt StatementList { printf("\n"); }
     ;
 
 ElseStmt:
@@ -202,7 +228,7 @@ ElseStmt:
     | {}
     ;
 
-getLabels:
+dummyLabels:
     { $$ = (char*)malloc(100 * sizeof(char)); $$ = genBlockLabel(); }
 
 begin:
@@ -220,8 +246,8 @@ Statement:
     | Term { strcpy($$, $1); }
     ;
 
-ComplexRelExp:
-    ComplexRelExp AND RelExp {
+ComRelExp:
+    ComRelExp AND Relexp {
         strcpy($$, genLabel());
         strcpy(str, $$);
         strcat(str, "=");
@@ -230,7 +256,7 @@ ComplexRelExp:
         strcat(str, $3);
         printf("\n%s", str);
     }
-    | ComplexRelExp OR RelExp {
+    | ComRelExp OR Relexp {
         strcpy($$, genLabel());
         strcpy(str, $$);
         strcat(str, "=");
@@ -239,10 +265,10 @@ ComplexRelExp:
         strcat(str, $3);
         printf("\n%s", str);
     }
-    | RelExp { strcpy($$, $1); }
+    | Relexp { strcpy($$, $1); }
     ;
 
-RelExp:
+Relexp:
     Term LT Term {
         strcpy($$, genLabel());
         strcpy(str, $$);
@@ -297,7 +323,7 @@ RelExp:
         strcat(str, $4);
         printf("\n%s", str);
     }
-    | LPAREN RelExp RPAREN {
+    | LPAREN Relexp RPAREN {
         strcpy($$, genLabel());
         strcpy(str, $$);
         strcat(str, "=");
@@ -307,7 +333,7 @@ RelExp:
         strcat(str, ")");
         printf("\n%s", str);
     }
-    | NOT RelExp {
+    | NOT Relexp {
         strcpy($$, genLabel());
         strcpy(str, $$);
         strcat(str, "=");
@@ -341,7 +367,7 @@ Term:
     ;
 
 Factor:
-    Factor MUL SignVal {
+    Factor MUL SIGNVal {
         char* g = genLabel();
         strcpy($$, g);
         strcpy(str, $$);
@@ -351,7 +377,7 @@ Factor:
         strcat(str, $3);
         printf("\n%s", str);
     }
-    |Factor DIV SignVal {
+    |Factor DIV SIGNVal {
         char* g = genLabel();
         strcpy($$, g);
         strcpy(str, $$);
@@ -361,10 +387,10 @@ Factor:
         strcat(str, $3);
         printf("\n%s", str);
     }
-    | SignVal { strcpy($$, $1); }
+    | SIGNVal { strcpy($$, $1); }
     ;
 
-SignVal:
+SIGNVal:
     ADD Val {
         strcpy($$, "+");
         strcat($$, $2);
@@ -384,8 +410,8 @@ CaseVal:
     }
     | NUMBER    {
         char* buf = (char*)malloc(sizeof(char) * 1000);
-        int getLabels = $1;
-        sprintf(buf, "%d", getLabels);
+        int dummyLabels = $1;
+        sprintf(buf, "%d", dummyLabels);
         strcpy($$, buf);
     };
     
@@ -396,8 +422,8 @@ Val:
     }
     | NUMBER {
         char* buf = (char*)malloc(sizeof(char) * 1000);
-        int getLabels = $1;
-        sprintf(buf, "%d", getLabels);
+        int dummyLabels = $1;
+        sprintf(buf, "%d", dummyLabels);
         strcpy($$, buf);
     }
     | PADD IDENTIFIER {
@@ -557,7 +583,7 @@ char* OutLabel(int Ocount){
     return s;
 }
 
-void add_symbol(char* name, char* type, int val, char* NonTerminalAddr) {
+void add_symbol(char* name, char* type, int val, char* addr) {
     if (symcount >= 10000) {
         fprintf(stderr, "Error: Symbol table is full\n");
         exit(EXIT_FAILURE);
@@ -582,12 +608,12 @@ void add_symbol(char* name, char* type, int val, char* NonTerminalAddr) {
     }
 
     sym->val.intval = val;
-    strncpy(sym->NonTerminalAddr, NonTerminalAddr, sizeof(sym->NonTerminalAddr) - 1);
-    sym->NonTerminalAddr[sizeof(sym->NonTerminalAddr) - 1] = '\0'; // Ensure null-termination
+    strncpy(sym->addr, addr, sizeof(sym->addr) - 1);
+    sym->addr[sizeof(sym->addr) - 1] = '\0'; // Ensure null-termination
 
     symtab[symcount++] = sym;
 
-    printf("Added symbol: name=%s, type=%s, val=%d, NonTerminalAddr=%s\n", sym->name, sym->type, sym->val.intval, sym->NonTerminalAddr);
+    printf("Added symbol: name=%s, type=%s, val=%d, addr=%s\n", sym->name, sym->type, sym->val.intval, sym->addr);
 }
 
 
